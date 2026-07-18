@@ -1,0 +1,571 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		22F192CF2676785F769C2F8F /* BatterySectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CF7E2FD2E29CF74D008119 /* BatterySectionViews.swift */; };
+		2E34D0B5CFD26DE001E5C3BD /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7297D504F69D3B34D2D67 /* AboutView.swift */; };
+		3145ABB60F6DB7CF0442E228 /* ThemeProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9650F2B0CCC1BAB735592A99 /* ThemeProfile.swift */; };
+		48EB7C426FA264AB738B7932 /* WattageSparklineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2298B7E8B348AE538752BF7 /* WattageSparklineView.swift */; };
+		492F59A5418AB7BF49B3F124 /* CompactPopoverLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFEE1B5032BA438801BCF40 /* CompactPopoverLayout.swift */; };
+		5BCB6383D7F226452018B33F /* ChargerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2270CC3F170A118C75BA76 /* ChargerInfo.swift */; };
+		626B00DA511AD7E7E75CD5D6 /* PowerSourceReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228841A11BE78873903EDF18 /* PowerSourceReader.swift */; };
+		6FB1372ABE660F9FE8A3E810 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10BD7392E90D5D5675B847 /* SettingsView.swift */; };
+		8FB35D4F32E35501ECF1BE0D /* BatteryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16246E649BE87FA382C5511A /* BatteryViewModel.swift */; };
+		A4CC2D7F16EDE40A1117B83C /* AppSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E01B281C1D952F22451686 /* AppSettingsTests.swift */; };
+		AE25F54C586AD8FC2950C9FD /* BatteryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E0722EB4B1992BE03F31D6 /* BatteryService.swift */; };
+		AE358FAA8A5800FC9BF5A40C /* GraphSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9734ADFBEB981282456B6221 /* GraphSettingsView.swift */; };
+		B032EE1896E9C6C62F91859E /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41CF069695B1E0538471131E /* MenuView.swift */; };
+		BE4F6C46168A4FEA7849C51A /* MaterialPopoverLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB75EF38C305C15F53A2E3A6 /* MaterialPopoverLayout.swift */; };
+		C3CED0550B552F88AE9C9AFD /* VoltPeekApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727258B1649F08CA8F05F5E3 /* VoltPeekApp.swift */; };
+		C8E6A01A2B59F6299BE96679 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1B8291AAD439DDF3882926 /* AppSettings.swift */; };
+		CA7D2DBB10BF3744B39F22B7 /* ThemeContentHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CF3916F5BBE81A50E94B39 /* ThemeContentHelpers.swift */; };
+		CB93FABE3A22F66FCA599A80 /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37915BBA20EFB211A81CC96 /* SettingsManager.swift */; };
+		CB985E4D821478448C693E6B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA4D811CAD506F9242695781 /* Assets.xcassets */; };
+		CD8228F996CFCA35969BA917 /* BatteryHeroHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6835375639A5400BD4CC3D71 /* BatteryHeroHeader.swift */; };
+		CF564854F6C7A33480CAC6F2 /* LiquidGlassPopoverLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97914E17425D560707B3DAC /* LiquidGlassPopoverLayout.swift */; };
+		D4879917B61094074E153060 /* PopoverThemeStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF14936574FE0BD502B33197 /* PopoverThemeStyle.swift */; };
+		DDA8BA64495D2ADD045884BD /* PowerSourceReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9060C367461BA066E8B790AA /* PowerSourceReaderTests.swift */; };
+		DE4D68978A6952A5FA88D716 /* BatteryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107C87EF6929AB8C02EA0077 /* BatteryInfo.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FE8BAD87D45A1EDD5499C65C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5D13B81F7964E880B85AAF5E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CD868D8BD138C99B36F11869;
+			remoteInfo = VoltPeek;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		05E01B281C1D952F22451686 /* AppSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsTests.swift; sourceTree = "<group>"; };
+		107C87EF6929AB8C02EA0077 /* BatteryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryInfo.swift; sourceTree = "<group>"; };
+		16246E649BE87FA382C5511A /* BatteryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryViewModel.swift; sourceTree = "<group>"; };
+		19CF3916F5BBE81A50E94B39 /* ThemeContentHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeContentHelpers.swift; sourceTree = "<group>"; };
+		228841A11BE78873903EDF18 /* PowerSourceReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerSourceReader.swift; sourceTree = "<group>"; };
+		41AE88475A41D0888F510B25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		41CF069695B1E0538471131E /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		5E1B8291AAD439DDF3882926 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		60E7297D504F69D3B34D2D67 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		6835375639A5400BD4CC3D71 /* BatteryHeroHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryHeroHeader.swift; sourceTree = "<group>"; };
+		727258B1649F08CA8F05F5E3 /* VoltPeekApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltPeekApp.swift; sourceTree = "<group>"; };
+		7DBD859A1CB5288B22A212B2 /* VoltPeekTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoltPeekTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9060C367461BA066E8B790AA /* PowerSourceReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerSourceReaderTests.swift; sourceTree = "<group>"; };
+		9650F2B0CCC1BAB735592A99 /* ThemeProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeProfile.swift; sourceTree = "<group>"; };
+		9734ADFBEB981282456B6221 /* GraphSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphSettingsView.swift; sourceTree = "<group>"; };
+		AA10BD7392E90D5D5675B847 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		AF14936574FE0BD502B33197 /* PopoverThemeStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverThemeStyle.swift; sourceTree = "<group>"; };
+		B2298B7E8B348AE538752BF7 /* WattageSparklineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WattageSparklineView.swift; sourceTree = "<group>"; };
+		BD2270CC3F170A118C75BA76 /* ChargerInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargerInfo.swift; sourceTree = "<group>"; };
+		CA4D811CAD506F9242695781 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D37915BBA20EFB211A81CC96 /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
+		E3E0722EB4B1992BE03F31D6 /* BatteryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryService.swift; sourceTree = "<group>"; };
+		EAFEE1B5032BA438801BCF40 /* CompactPopoverLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactPopoverLayout.swift; sourceTree = "<group>"; };
+		EF79AE78E7DBDA8CDBBAA757 /* VoltPeek.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoltPeek.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4CF7E2FD2E29CF74D008119 /* BatterySectionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatterySectionViews.swift; sourceTree = "<group>"; };
+		F97914E17425D560707B3DAC /* LiquidGlassPopoverLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiquidGlassPopoverLayout.swift; sourceTree = "<group>"; };
+		FB75EF38C305C15F53A2E3A6 /* MaterialPopoverLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaterialPopoverLayout.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		09C08C7B3335E71D1EBD6298 /* VoltPeek */ = {
+			isa = PBXGroup;
+			children = (
+				41AE88475A41D0888F510B25 /* Info.plist */,
+				FAC02A7D51E723F2DA6F9D80 /* App */,
+				F49CB862B7314B310E7205F2 /* Models */,
+				641DF2846E4A212F04F29321 /* Resources */,
+				C17AAAF0C6E7E02F86D02084 /* Services */,
+				85B128E81C97FC3A355DB732 /* Theme */,
+				17EE4E0FAE2C14E1AA3C107F /* ViewModels */,
+				FF630EE4889362256484BD74 /* Views */,
+			);
+			path = VoltPeek;
+			sourceTree = "<group>";
+		};
+		17EE4E0FAE2C14E1AA3C107F /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				16246E649BE87FA382C5511A /* BatteryViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		641DF2846E4A212F04F29321 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CA4D811CAD506F9242695781 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		85B128E81C97FC3A355DB732 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				AF14936574FE0BD502B33197 /* PopoverThemeStyle.swift */,
+				9650F2B0CCC1BAB735592A99 /* ThemeProfile.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		98ACB97E66C7D5F47ED68BFE /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				6835375639A5400BD4CC3D71 /* BatteryHeroHeader.swift */,
+				B2298B7E8B348AE538752BF7 /* WattageSparklineView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		9DF25C119AABD9970F438DD4 /* VoltPeekTests */ = {
+			isa = PBXGroup;
+			children = (
+				05E01B281C1D952F22451686 /* AppSettingsTests.swift */,
+				9060C367461BA066E8B790AA /* PowerSourceReaderTests.swift */,
+			);
+			path = VoltPeekTests;
+			sourceTree = "<group>";
+		};
+		C17AAAF0C6E7E02F86D02084 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E3E0722EB4B1992BE03F31D6 /* BatteryService.swift */,
+				228841A11BE78873903EDF18 /* PowerSourceReader.swift */,
+				D37915BBA20EFB211A81CC96 /* SettingsManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		C59CC88466A1448AC0A14A03 /* Themes */ = {
+			isa = PBXGroup;
+			children = (
+				EAFEE1B5032BA438801BCF40 /* CompactPopoverLayout.swift */,
+				F97914E17425D560707B3DAC /* LiquidGlassPopoverLayout.swift */,
+				FB75EF38C305C15F53A2E3A6 /* MaterialPopoverLayout.swift */,
+				19CF3916F5BBE81A50E94B39 /* ThemeContentHelpers.swift */,
+			);
+			path = Themes;
+			sourceTree = "<group>";
+		};
+		CE8590A4B32E577DA2C1BEFE = {
+			isa = PBXGroup;
+			children = (
+				09C08C7B3335E71D1EBD6298 /* VoltPeek */,
+				9DF25C119AABD9970F438DD4 /* VoltPeekTests */,
+				EF991868E1E1401A70E9F7D8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EF991868E1E1401A70E9F7D8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EF79AE78E7DBDA8CDBBAA757 /* VoltPeek.app */,
+				7DBD859A1CB5288B22A212B2 /* VoltPeekTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F49CB862B7314B310E7205F2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5E1B8291AAD439DDF3882926 /* AppSettings.swift */,
+				107C87EF6929AB8C02EA0077 /* BatteryInfo.swift */,
+				BD2270CC3F170A118C75BA76 /* ChargerInfo.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FAC02A7D51E723F2DA6F9D80 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				727258B1649F08CA8F05F5E3 /* VoltPeekApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		FF630EE4889362256484BD74 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				60E7297D504F69D3B34D2D67 /* AboutView.swift */,
+				F4CF7E2FD2E29CF74D008119 /* BatterySectionViews.swift */,
+				9734ADFBEB981282456B6221 /* GraphSettingsView.swift */,
+				41CF069695B1E0538471131E /* MenuView.swift */,
+				AA10BD7392E90D5D5675B847 /* SettingsView.swift */,
+				98ACB97E66C7D5F47ED68BFE /* Components */,
+				C59CC88466A1448AC0A14A03 /* Themes */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		81B8C85890E17E87052D2C26 /* VoltPeekTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 93FAD49A9B5AD58ED00DE1EE /* Build configuration list for PBXNativeTarget "VoltPeekTests" */;
+			buildPhases = (
+				33E1506E3279D3D407757F1E /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D41BDAC5263C38FB59CA9D59 /* PBXTargetDependency */,
+			);
+			name = VoltPeekTests;
+			packageProductDependencies = (
+			);
+			productName = VoltPeekTests;
+			productReference = 7DBD859A1CB5288B22A212B2 /* VoltPeekTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CD868D8BD138C99B36F11869 /* VoltPeek */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 45503ADC9F886F0A9DFB392D /* Build configuration list for PBXNativeTarget "VoltPeek" */;
+			buildPhases = (
+				A276572266E90E04B34A0682 /* Sources */,
+				DFD63B7E35D65A84EA893DEF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VoltPeek;
+			packageProductDependencies = (
+			);
+			productName = VoltPeek;
+			productReference = EF79AE78E7DBDA8CDBBAA757 /* VoltPeek.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5D13B81F7964E880B85AAF5E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					CD868D8BD138C99B36F11869 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 868D4B4F83B09B9C4E686186 /* Build configuration list for PBXProject "VoltPeek" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = CE8590A4B32E577DA2C1BEFE;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = EF991868E1E1401A70E9F7D8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CD868D8BD138C99B36F11869 /* VoltPeek */,
+				81B8C85890E17E87052D2C26 /* VoltPeekTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DFD63B7E35D65A84EA893DEF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB985E4D821478448C693E6B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		33E1506E3279D3D407757F1E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A4CC2D7F16EDE40A1117B83C /* AppSettingsTests.swift in Sources */,
+				DDA8BA64495D2ADD045884BD /* PowerSourceReaderTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A276572266E90E04B34A0682 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2E34D0B5CFD26DE001E5C3BD /* AboutView.swift in Sources */,
+				C8E6A01A2B59F6299BE96679 /* AppSettings.swift in Sources */,
+				CD8228F996CFCA35969BA917 /* BatteryHeroHeader.swift in Sources */,
+				DE4D68978A6952A5FA88D716 /* BatteryInfo.swift in Sources */,
+				22F192CF2676785F769C2F8F /* BatterySectionViews.swift in Sources */,
+				AE25F54C586AD8FC2950C9FD /* BatteryService.swift in Sources */,
+				8FB35D4F32E35501ECF1BE0D /* BatteryViewModel.swift in Sources */,
+				5BCB6383D7F226452018B33F /* ChargerInfo.swift in Sources */,
+				492F59A5418AB7BF49B3F124 /* CompactPopoverLayout.swift in Sources */,
+				AE358FAA8A5800FC9BF5A40C /* GraphSettingsView.swift in Sources */,
+				CF564854F6C7A33480CAC6F2 /* LiquidGlassPopoverLayout.swift in Sources */,
+				BE4F6C46168A4FEA7849C51A /* MaterialPopoverLayout.swift in Sources */,
+				B032EE1896E9C6C62F91859E /* MenuView.swift in Sources */,
+				D4879917B61094074E153060 /* PopoverThemeStyle.swift in Sources */,
+				626B00DA511AD7E7E75CD5D6 /* PowerSourceReader.swift in Sources */,
+				CB93FABE3A22F66FCA599A80 /* SettingsManager.swift in Sources */,
+				6FB1372ABE660F9FE8A3E810 /* SettingsView.swift in Sources */,
+				CA7D2DBB10BF3744B39F22B7 /* ThemeContentHelpers.swift in Sources */,
+				3145ABB60F6DB7CF0442E228 /* ThemeProfile.swift in Sources */,
+				C3CED0550B552F88AE9C9AFD /* VoltPeekApp.swift in Sources */,
+				48EB7C426FA264AB738B7932 /* WattageSparklineView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D41BDAC5263C38FB59CA9D59 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CD868D8BD138C99B36F11869 /* VoltPeek */;
+			targetProxy = FE8BAD87D45A1EDD5499C65C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		719C6A6C7F5FB0DD7CC94525 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.voltpeek.app.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VoltPeek.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VoltPeek";
+			};
+			name = Release;
+		};
+		747DDB18BBB5FADBBBCC587B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		8F50F87EC63E71FDF14ED203 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		98409FD9D7BDAFB09F9841DD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.voltpeek.app.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VoltPeek.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VoltPeek";
+			};
+			name = Debug;
+		};
+		D1A54AB05D643E5009BE9E50 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = VoltPeek/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.voltpeek.app;
+				PRODUCT_NAME = VoltPeek;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		D3FBE8E3F2B2C669430DAF44 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = VoltPeek/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.voltpeek.app;
+				PRODUCT_NAME = VoltPeek;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		45503ADC9F886F0A9DFB392D /* Build configuration list for PBXNativeTarget "VoltPeek" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D3FBE8E3F2B2C669430DAF44 /* Debug */,
+				D1A54AB05D643E5009BE9E50 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		868D4B4F83B09B9C4E686186 /* Build configuration list for PBXProject "VoltPeek" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8F50F87EC63E71FDF14ED203 /* Debug */,
+				747DDB18BBB5FADBBBCC587B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		93FAD49A9B5AD58ED00DE1EE /* Build configuration list for PBXNativeTarget "VoltPeekTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				98409FD9D7BDAFB09F9841DD /* Debug */,
+				719C6A6C7F5FB0DD7CC94525 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5D13B81F7964E880B85AAF5E /* Project object */;
+}

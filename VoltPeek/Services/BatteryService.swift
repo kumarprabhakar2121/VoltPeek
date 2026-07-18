@@ -1,0 +1,68 @@
+import Foundation
+
+/// A single wattage sample for the rolling 1-minute graph.
+struct WattageSample: Equatable, Sendable {
+    let date: Date
+    let watts: Double
+}
+
+/// Periodically polls `PowerSourceReader` and publishes the latest battery/charger snapshot.
+@MainActor
+@Observable
+final class BatteryService {
+    private(set) var battery: BatteryInfo = .unavailable
+    private(set) var charger: ChargerInfo = .unavailable
+    private(set) var lastUpdated: Date?
+    /// Samples within the last 60 seconds (oldest → newest).
+    private(set) var wattageHistory: [WattageSample] = []
+
+    private let reader: PowerSourceReader
+    private var pollingTask: Task<Void, Never>?
+    private var isReading = false
+    private let historyWindow: TimeInterval = 60
+
+    init(reader: PowerSourceReader = PowerSourceReader()) {
+        self.reader = reader
+    }
+
+    /// Starts (or restarts) polling at the given interval in seconds.
+    func startPolling(intervalSeconds: Double) {
+        stopPolling()
+        let interval = AppSettings.clampedInterval(intervalSeconds)
+        refresh()
+        pollingTask = Task { [weak self] in
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(interval))
+                guard !Task.isCancelled else { break }
+                self?.refresh()
+            }
+        }
+    }
+
+    /// Cancels the polling loop.
+    func stopPolling() {
+        pollingTask?.cancel()
+        pollingTask = nil
+    }
+
+    /// Performs a single coalesced read from the system.
+    func refresh() {
+        guard !isReading else { return }
+        isReading = true
+        defer { isReading = false }
+
+        let snapshot = reader.read()
+        battery = snapshot.battery
+        charger = snapshot.charger
+        lastUpdated = Date()
+        appendWattageSample(battery.watts)
+    }
+
+    private func appendWattageSample(_ watts: Double?) {
+        let now = Date()
+        let value = watts ?? 0
+        wattageHistory.append(WattageSample(date: now, watts: value))
+        let cutoff = now.addingTimeInterval(-historyWindow)
+        wattageHistory.removeAll { $0.date < cutoff }
+    }
+}

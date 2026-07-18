@@ -1,0 +1,60 @@
+name: VoltPeek
+options:
+  bundleIdPrefix: com.voltpeek
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+  xcodeVersion: "15.0"
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  VoltPeek:
+    type: application
+    platform: macOS
+    sources:
+      - path: VoltPeek
+        excludes:
+          - "**/.DS_Store"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.voltpeek.app
+        PRODUCT_NAME: VoltPeek
+        INFOPLIST_FILE: VoltPeek/Info.plist
+        GENERATE_INFOPLIST_FILE: false
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_HARDENED_RUNTIME: YES
+        COMBINE_HIDPI_IMAGES: YES
+        LD_RUNPATH_SEARCH_PATHS:
+          - "$(inherited)"
+          - "@executable_path/../Frameworks"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SWIFT_EMIT_LOC_STRINGS: YES
+  VoltPeekTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: VoltPeekTests
+    dependencies:
+      - target: VoltPeek
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.voltpeek.app.tests
+        GENERATE_INFOPLIST_FILE: true
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/VoltPeek.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VoltPeek"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+schemes:
+  VoltPeek:
+    build:
+      targets:
+        VoltPeek: all
+        VoltPeekTests: [test]
+    test:
+      targets:
+        - VoltPeekTests
+    run:
+      config: Debug
