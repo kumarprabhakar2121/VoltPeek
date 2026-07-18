@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VoltPeek</title>
+  <meta name="description" content="VoltPeek — native macOS menu bar battery and charging telemetry." />
+  <style>
+    :root {
+      --bg: #0f1410;
+      --text: #e8efe6;
+      --muted: #9aab9a;
+      --accent: #6fbf73;
+      --link: #8fd492;
+      --rule: #2a342c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #1a2a1c 0%, transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, #152018 0%, transparent 50%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      padding: 2rem 1.25rem;
+    }
+    main { max-width: 28rem; text-align: center; }
+    .brand {
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 0.75rem;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 2.6rem);
+      font-weight: 650;
+      letter-spacing: -0.03em;
+      margin: 0 0 0.75rem;
+    }
+    p { color: var(--muted); margin: 0 0 1.75rem; }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+    a {
+      color: var(--link);
+      text-decoration: none;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      padding: 0.55rem 1.1rem;
+      font-size: 0.95rem;
+    }
+    a:hover { border-color: var(--accent); color: var(--text); }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="brand">VoltPeek</p>
+    <h1>VoltPeek</h1>
+    <p>Native macOS menu bar app for live battery and charging telemetry. Local only — no accounts, no telemetry.</p>
+    <nav>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="support.html">Support</a>
+      <a href="mailto:hello@voltpeek.app">Email</a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -48,7 +48,11 @@ A Homebrew cask is planned after the first notarized GitHub Release. See [docs/H
 
 ## Privacy
 
-VoltPeek reads battery data **locally** via IOKit. It does not collect analytics, sell data, or require sign-in. See [docs/PRIVACY.md](docs/PRIVACY.md).
+VoltPeek reads battery data **locally** via IOKit. It does not collect analytics, sell data, or require sign-in.
+
+- Policy (Markdown): [docs/PRIVACY.md](docs/PRIVACY.md)
+- **App Store Privacy URL:** https://kumarprabhakar2121.github.io/VoltPeek/privacy.html
+- Support: https://kumarprabhakar2121.github.io/VoltPeek/support.html
 
 ---
 
