@@ -56,7 +56,16 @@ VoltPeek reads battery data **locally** via IOKit. It does not collect analytics
 
 ```bash
 xcodegen generate
-xcodebuild -scheme VoltPeek -destination 'platform=macOS' test
+xcodebuild -project VoltPeek.xcodeproj -scheme VoltPeek -destination 'platform=macOS' test
+```
+
+### Publish this repo to GitHub
+
+Local `git` is initialized on `main`. To create the remote (one-time):
+
+```bash
+gh auth login
+gh repo create VoltPeek --public --source=. --remote=origin --push --description "Native macOS menu bar app for live battery and charging telemetry"
 ```
 
 Architecture notes: [doc.md](doc.md) · Release checklist: [docs/RELEASE.md](docs/RELEASE.md) · Support: [docs/SUPPORT.md](docs/SUPPORT.md)
