@@ -27,3 +27,6 @@ playground.xcworkspace
 .idea/
 .vscode/
 *.log
+
+# Separate tap repo (own git remotes)
+homebrew-tap/

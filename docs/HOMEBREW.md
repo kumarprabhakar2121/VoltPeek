@@ -1,26 +1,42 @@
-# Homebrew (future)
+# Homebrew — VoltPeek
 
-Primary distribution is the **Mac App Store**. Homebrew is optional for users who prefer CLI installs.
+VoltPeek is published via a personal Homebrew tap (official `homebrew-cask` can follow after notarization).
 
-## Prerequisites
-
-1. Apple Developer ID Application certificate + notarization (same Apple Developer Program).
-2. A GitHub Release with a notarized `.dmg` or `.zip` of `VoltPeek.app`.
-3. A cask formula, e.g. `Casks/voltpeek.rb`, pointing at that release URL and `sha256`.
-
-## Suggested flow (after first notarized build)
+## Install
 
 ```bash
-# Example only — do not run until artifacts exist
+brew tap kumarprabhakar2121/tap
 brew install --cask voltpeek
 ```
 
-Do **not** publish a cask until:
+One-liner:
 
-- [ ] Notarized app opens without Gatekeeper blocks
-- [ ] Release assets are stable (versioned URLs)
-- [ ] README install section links the cask
+```bash
+brew install --cask kumarprabhakar2121/tap/voltpeek
+```
 
-## Why MAS first
+## Update / uninstall
 
-Better discovery and trust for a free utility; Homebrew remains a power-user complement, not a blocker.
+```bash
+brew upgrade --cask voltpeek
+brew uninstall --cask voltpeek
+```
+
+## Gatekeeper
+
+v1.0.0 is **ad-hoc signed** (not Apple notarized). First launch: right-click → **Open**, or allow in System Settings → Privacy & Security.
+
+## Maintainers — bump a version
+
+1. Build DMG: `./scripts/make-dmg.sh 1.0.1`
+2. Upload to GitHub Release `v1.0.1` as `VoltPeek-1.0.1.dmg`
+3. Update [`homebrew-tap/Casks/voltpeek.rb`](https://github.com/kumarprabhakar2121/homebrew-tap/blob/main/Casks/voltpeek.rb):
+   - `version`
+   - `sha256` (`shasum -a 256 VoltPeek-1.0.1.dmg`)
+4. Commit & push the tap repo
+
+Tap repo: https://github.com/kumarprabhakar2121/homebrew-tap
+
+## Official Homebrew Cask (later)
+
+After Developer ID + notarization, open a PR to [Homebrew/homebrew-cask](https://github.com/Homebrew/homebrew-cask) so users can run `brew install --cask voltpeek` without tapping.

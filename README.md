@@ -10,26 +10,28 @@ Support: [hello@voltpeek.app](mailto:hello@voltpeek.app)
 
 ## Install
 
-### Mac App Store (recommended)
+### Homebrew
 
-VoltPeek is intended to be free on the Mac App Store. Publishing requires an [Apple Developer Program](https://developer.apple.com/programs/) membership (~$99/year) even when the app price is $0.
+```bash
+brew install --cask kumarprabhakar2121/tap/voltpeek
+```
 
-Until the Store listing is live, build from source (below).
+Details: [docs/HOMEBREW.md](docs/HOMEBREW.md). First launch may need right-click → Open until the app is notarized.
+
+### Mac App Store
+
+Planned as a free listing (requires Apple Developer Program). See [docs/RELEASE.md](docs/RELEASE.md).
 
 ### Build from source
 
 ```bash
 brew install xcodegen   # if needed
-cd /path/to/battery
+cd /path/to/VoltPeek
 xcodegen generate
 open VoltPeek.xcodeproj
 ```
 
 Build and run the **VoltPeek** scheme. The app appears in the menu bar only (no Dock icon).
-
-### Homebrew
-
-A Homebrew cask is planned after the first notarized GitHub Release. See [docs/HOMEBREW.md](docs/HOMEBREW.md).
 
 ---
 
