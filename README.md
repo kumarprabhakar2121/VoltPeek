@@ -55,10 +55,13 @@ Power values are **signed**: positive while charging into the pack, negative whi
 ### Homebrew
 
 ```bash
-brew install --cask kumarprabhakar2121/tap/voltpeek
+brew tap kumarprabhakar2121/tap
+brew install --cask voltpeek
 ```
 
-Details: [docs/HOMEBREW.md](docs/HOMEBREW.md). First launch may need right-click → **Open** until the app is notarized.
+After tapping once, `brew install --cask voltpeek` is enough.
+
+Official Homebrew Cask (no tap) needs Apple notarization + repo notability — see [docs/HOMEBREW.md](docs/HOMEBREW.md). First launch may need right-click → **Open** until notarized.
 
 ### Mac App Store
 
