@@ -3,19 +3,6 @@
 ## Install (works today)
 
 ```bash
-brew tap kumarprabhakar2121/tap
-brew install --cask voltpeek
-```
-
-After the tap is added once, this short form works:
-
-```bash
-brew install --cask voltpeek
-```
-
-One-liner:
-
-```bash
 brew install --cask kumarprabhakar2121/tap/voltpeek
 ```
 
