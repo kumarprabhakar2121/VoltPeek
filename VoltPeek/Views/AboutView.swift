@@ -30,6 +30,6 @@ struct AboutView: View {
             Spacer(minLength: 0)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .padding(20)
+        .padding(22)
     }
 }

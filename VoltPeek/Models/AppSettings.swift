@@ -28,34 +28,43 @@ enum PopoverTheme: String, CaseIterable, Identifiable, Sendable {
 
 /// How the menu bar extra is rendered.
 enum MenuBarStyle: String, CaseIterable, Identifiable, Sendable {
-    case text
     case battery
-    case batteryPercent
-    case bolt
-    case boltWatts
-    case batteryBolt
+    case watts
+    case both
 
     var id: String { rawValue }
 
     var title: String {
         switch self {
-        case .text: return "Text"
         case .battery: return "Battery"
-        case .batteryPercent: return "Battery + %"
-        case .bolt: return "Power bolt"
-        case .boltWatts: return "Bolt + Watts"
-        case .batteryBolt: return "Battery (auto bolt)"
+        case .watts: return "Watts"
+        case .both: return "Both"
         }
     }
 
     var subtitle: String {
         switch self {
-        case .text: return "Emoji / text watts and percent"
-        case .battery: return "System-like battery icon by fill"
-        case .batteryPercent: return "Battery icon with percentage"
-        case .bolt: return "Lightning bolt power icon"
-        case .boltWatts: return "Bolt with live signed watts"
-        case .batteryBolt: return "Bolt when charging, else battery"
+        case .battery: return "Percentage and system battery icon"
+        case .watts: return "Live charging power"
+        case .both: return "Watts plus battery"
+        }
+    }
+
+    /// Maps current and legacy UserDefaults raw values to the slim style set.
+    static func migrating(fromRaw raw: String?) -> MenuBarStyle {
+        guard let raw else { return .battery }
+        if let style = MenuBarStyle(rawValue: raw) {
+            return style
+        }
+        switch raw {
+        case "batteryPercent", "batteryBolt", "batteryIcon", "iconAndPercent":
+            return .battery
+        case "boltWatts", "bolt":
+            return .watts
+        case "text":
+            return .both
+        default:
+            return .battery
         }
     }
 }
@@ -203,7 +212,7 @@ struct AppSettings: Equatable, Sendable {
         fontSize: .medium,
         uiScale: .standard,
         accessibility: .default,
-        menuBarStyle: .text
+        menuBarStyle: .battery
     )
 
     /// Allowed discrete refresh intervals shown in Settings.

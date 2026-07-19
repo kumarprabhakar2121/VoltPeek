@@ -5,7 +5,8 @@ struct SettingsView: View {
     @Bindable var settingsManager: SettingsManager
     @State private var confirmReset = false
 
-    private let menuBarColumns = [
+    private let selectionColumns = [
+        GridItem(.flexible(), spacing: 10),
         GridItem(.flexible(), spacing: 10),
         GridItem(.flexible(), spacing: 10)
     ]
@@ -13,58 +14,49 @@ struct SettingsView: View {
     var body: some View {
         Form {
             Section {
-                LazyVGrid(columns: menuBarColumns, spacing: 10) {
+                LazyVGrid(columns: selectionColumns, spacing: 10) {
                     ForEach(MenuBarStyle.allCases) { style in
                         Button {
                             settingsManager.menuBarStyle = style
                         } label: {
-                            menuBarCell(for: style)
+                            PreferenceSelectionCard(
+                                title: style.title,
+                                subtitle: style.subtitle,
+                                isSelected: settingsManager.menuBarStyle == style
+                            ) {
+                                menuBarPreview(for: style)
+                                    .foregroundStyle(.primary)
+                            }
                         }
                         .buttonStyle(.plain)
                     }
                 }
-                .padding(.vertical, 4)
+                .padding(.vertical, 2)
             } header: {
-                Text("Menu Bar")
+                Label("Menu Bar", systemImage: "menubar.rectangle")
             } footer: {
                 Text("To visually replace macOS Battery, turn it off in System Settings → Control Center → Battery → Show in Menu Bar.")
             }
 
-            if settingsManager.menuBarStyle == .text {
-                Section("Text Options") {
-                    Toggle("Show Watts in Menu Bar", isOn: $settingsManager.showWattsInMenuBar)
-                    Toggle("Show Battery Percentage in Menu Bar", isOn: $settingsManager.showPercentageInMenuBar)
-                }
-            }
-
             Section {
-                ForEach(PopoverTheme.allCases) { theme in
-                    Button {
-                        settingsManager.popoverTheme = theme
-                    } label: {
-                        HStack(spacing: 12) {
-                            themeGlyph(for: theme)
-                                .frame(width: 44, height: 36)
-
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(theme.title)
-                                    .foregroundStyle(.primary)
-                                Text(theme.subtitle)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-
-                            Spacer()
-
-                            if settingsManager.popoverTheme == theme {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundStyle(.tint)
+                LazyVGrid(columns: selectionColumns, spacing: 10) {
+                    ForEach(PopoverTheme.allCases) { theme in
+                        Button {
+                            settingsManager.popoverTheme = theme
+                        } label: {
+                            PreferenceSelectionCard(
+                                title: theme.title,
+                                subtitle: theme.subtitle,
+                                isSelected: settingsManager.popoverTheme == theme
+                            ) {
+                                themeGlyph(for: theme)
+                                    .frame(width: 44, height: 36)
                             }
                         }
-                        .contentShape(Rectangle())
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
+                .padding(.vertical, 2)
 
                 Picker("Display Size", selection: Binding(
                     get: { settingsManager.displaySize },
@@ -75,18 +67,20 @@ struct SettingsView: View {
                     }
                 }
             } header: {
-                Text("Look")
+                Label("Look", systemImage: "paintbrush")
             } footer: {
                 Text("Theme changes the popover layout. Display Size scales type and spacing together.")
             }
 
-            Section("Behavior") {
+            Section {
                 Picker("Refresh Interval", selection: $settingsManager.refreshIntervalSeconds) {
                     ForEach(AppSettings.refreshIntervalOptions, id: \.self) { seconds in
                         Text(intervalLabel(seconds)).tag(seconds)
                     }
                 }
                 Toggle("Launch at Login", isOn: $settingsManager.launchAtLogin)
+            } header: {
+                Label("Behavior", systemImage: "gearshape")
             }
 
             Section {
@@ -95,7 +89,7 @@ struct SettingsView: View {
                 Toggle("Reduce Transparency", isOn: $settingsManager.reduceTransparency)
                 Toggle("Differentiate Without Color Alone", isOn: $settingsManager.differentiateWithoutColor)
             } header: {
-                Text("Accessibility")
+                Label("Accessibility", systemImage: "accessibility")
             } footer: {
                 Text("These are in-app overrides and combine with system accessibility settings.")
             }
@@ -107,8 +101,6 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(width: 540, height: 640)
-        .padding()
         .alert("Reset All Settings?", isPresented: $confirmReset) {
             Button("Cancel", role: .cancel) {}
             Button("Reset", role: .destructive) {
@@ -130,45 +122,6 @@ struct SettingsView: View {
             return "\(Int(seconds)) seconds"
         }
         return String(format: "%.1f seconds", seconds)
-    }
-
-    private func menuBarCell(for style: MenuBarStyle) -> some View {
-        let selected = settingsManager.menuBarStyle == style
-        return VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                menuBarPreview(for: style)
-                    .foregroundStyle(.primary)
-                Spacer(minLength: 0)
-                if selected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.tint)
-                        .imageScale(.small)
-                }
-            }
-            Text(style.title)
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.primary)
-                .lineLimit(1)
-            Text(style.subtitle)
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(10)
-        .frame(maxWidth: .infinity, minHeight: 88, alignment: .topLeading)
-        .background(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color(nsColor: .controlBackgroundColor))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .strokeBorder(
-                    selected ? Color.accentColor.opacity(0.85) : Color.primary.opacity(0.08),
-                    lineWidth: selected ? 2 : 1
-                )
-        )
-        .contentShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 
     @ViewBuilder
@@ -212,32 +165,76 @@ struct SettingsView: View {
 
     @ViewBuilder
     private func menuBarPreview(for style: MenuBarStyle) -> some View {
+        let a11y = settingsManager.accessibility
         switch style {
-        case .text:
-            Text("⚡ +42W")
-                .font(.caption.monospacedDigit())
         case .battery:
-            Image(systemName: "battery.75percent")
-        case .batteryPercent:
-            HStack(spacing: 2) {
-                Image(systemName: "battery.75percent")
+            HStack(spacing: 3) {
                 Text("75%")
                     .font(.caption.monospacedDigit())
+                    .fontWeight(a11y.boldText ? .bold : .regular)
+                SystemMenuBarBatteryIcon(percentage: 75, accessibility: a11y, height: 11)
             }
-        case .bolt:
-            Image(systemName: "bolt.fill")
-        case .boltWatts:
-            HStack(spacing: 2) {
-                Image(systemName: "bolt.fill")
-                Text("+42W")
+        case .watts:
+            Text("⚡ +42W")
+                .font(.caption.monospacedDigit())
+                .fontWeight(a11y.boldText ? .bold : .regular)
+        case .both:
+            HStack(spacing: 3) {
+                Text("⚡ +42W · 75%")
                     .font(.caption.monospacedDigit())
-            }
-        case .batteryBolt:
-            HStack(spacing: 2) {
-                Image(systemName: "battery.100percent.bolt")
-                Text("100%")
-                    .font(.caption.monospacedDigit())
+                    .fontWeight(a11y.boldText ? .bold : .regular)
+                SystemMenuBarBatteryIcon(percentage: 75, isCharging: true, accessibility: a11y, height: 11)
             }
         }
+    }
+}
+
+/// Shared selection card for visual preference grids (menu bar style, theme).
+private struct PreferenceSelectionCard<Preview: View>: View {
+    let title: String
+    let subtitle: String
+    let isSelected: Bool
+    @ViewBuilder let preview: () -> Preview
+
+    private let cornerRadius: CGFloat = 11
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .top) {
+                preview()
+                Spacer(minLength: 0)
+                if isSelected {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(.tint)
+                        .imageScale(.small)
+                }
+            }
+            .frame(minHeight: 28, alignment: .topLeading)
+
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.primary)
+                .lineLimit(1)
+
+            Text(subtitle)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, minHeight: 96, alignment: .topLeading)
+        .background(
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .fill(Color(nsColor: .controlBackgroundColor))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .strokeBorder(
+                    isSelected ? Color.accentColor.opacity(0.85) : Color.primary.opacity(0.08),
+                    lineWidth: isSelected ? 2 : 1
+                )
+        )
+        .contentShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
     }
 }

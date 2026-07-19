@@ -40,4 +40,30 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertEqual(PopoverTheme.material.title, "Cards")
         XCTAssertEqual(PopoverTheme.liquidGlass.title, "Glass")
     }
+
+    func testMenuBarStyleHasThreeCases() {
+        XCTAssertEqual(MenuBarStyle.allCases.map(\.rawValue), ["battery", "watts", "both"])
+        XCTAssertEqual(MenuBarStyle.battery.title, "Battery")
+        XCTAssertEqual(MenuBarStyle.watts.title, "Watts")
+        XCTAssertEqual(MenuBarStyle.both.title, "Both")
+        XCTAssertEqual(AppSettings.default.menuBarStyle, .battery)
+    }
+
+    func testMenuBarStyleMigrationFromLegacyRawValues() {
+        XCTAssertEqual(MenuBarStyle.migrating(fromRaw: nil), .battery)
+        XCTAssertEqual(MenuBarStyle.migrating(fromRaw: "battery"), .battery)
+        XCTAssertEqual(MenuBarStyle.migrating(fromRaw: "watts"), .watts)
+        XCTAssertEqual(MenuBarStyle.migrating(fromRaw: "both"), .both)
+
+        XCTAssertEqual(MenuBarStyle.migrating(fromRaw: "batteryPercent"), .battery)
+        XCTAssertEqual(MenuBarStyle.migrating(fromRaw: "batteryBolt"), .battery)
+        XCTAssertEqual(MenuBarStyle.migrating(fromRaw: "batteryIcon"), .battery)
+        XCTAssertEqual(MenuBarStyle.migrating(fromRaw: "iconAndPercent"), .battery)
+
+        XCTAssertEqual(MenuBarStyle.migrating(fromRaw: "boltWatts"), .watts)
+        XCTAssertEqual(MenuBarStyle.migrating(fromRaw: "bolt"), .watts)
+
+        XCTAssertEqual(MenuBarStyle.migrating(fromRaw: "text"), .both)
+        XCTAssertEqual(MenuBarStyle.migrating(fromRaw: "unknown-legacy"), .battery)
+    }
 }

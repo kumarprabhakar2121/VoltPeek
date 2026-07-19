@@ -31,7 +31,7 @@ struct GraphSettingsView: View {
 
             Spacer(minLength: 0)
         }
-        .padding(20)
+        .padding(22)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .themeEnvironment(
             theme: viewModel.settingsManager.popoverTheme,

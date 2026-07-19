@@ -173,20 +173,9 @@ final class SettingsManager {
             ? AccessibilityPreferences.default.differentiateWithoutColor
             : defaults.bool(forKey: Keys.differentiateWithoutColor)
 
-        if let raw = defaults.string(forKey: Keys.menuBarStyle) {
-            if let style = MenuBarStyle(rawValue: raw) {
-                self.menuBarStyle = style
-            } else {
-                // Migrate old raw values from earlier builds.
-                switch raw {
-                case "batteryIcon": self.menuBarStyle = .battery
-                case "iconAndPercent": self.menuBarStyle = .batteryPercent
-                default: self.menuBarStyle = AppSettings.default.menuBarStyle
-                }
-            }
-        } else {
-            self.menuBarStyle = AppSettings.default.menuBarStyle
-        }
+        let migratedStyle = MenuBarStyle.migrating(fromRaw: defaults.string(forKey: Keys.menuBarStyle))
+        self.menuBarStyle = migratedStyle
+        defaults.set(migratedStyle.rawValue, forKey: Keys.menuBarStyle)
 
         let serviceEnabled = SMAppService.mainApp.status == .enabled
         self.isSyncingLaunchAtLogin = true

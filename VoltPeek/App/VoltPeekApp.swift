@@ -10,7 +10,7 @@ struct VoltPeekApp: App {
             MenuView(viewModel: viewModel)
         } label: {
             MenuBarLabelView(viewModel: viewModel)
-                .id(viewModel.menuBarEpoch)
+                .id("\(viewModel.menuBarEpoch)|\(viewModel.settingsManager.accessibility.fingerprint)|\(viewModel.settingsManager.menuBarStyle.rawValue)")
                 .task {
                     viewModel.start()
                 }
@@ -32,7 +32,7 @@ struct VoltPeekApp: App {
                         Label("About", systemImage: "info.circle")
                     }
             }
-            .frame(width: 500, height: 580)
+            .frame(width: 560, height: 620)
         }
     }
 }
@@ -41,34 +41,44 @@ struct VoltPeekApp: App {
 private struct MenuBarLabelView: View {
     @Bindable var viewModel: BatteryViewModel
 
+    private var a11y: AccessibilityPreferences {
+        viewModel.settingsManager.accessibility
+    }
+
     var body: some View {
         let style = viewModel.settingsManager.menuBarStyle
-        let symbol = viewModel.menuBarSymbolName
-        let text = viewModel.menuBarAccessoryText
+        let pct = viewModel.battery.percentage
+        let charging = viewModel.battery.isCharging
 
         Group {
             switch style {
-            case .text:
-                Text(text)
-            case .battery, .bolt:
-                if let symbol {
-                    Image(systemName: symbol)
-                        .symbolRenderingMode(.hierarchical)
+            case .battery:
+                HStack(spacing: 4) {
+                    Text("\(pct)%")
+                        .monospacedDigit()
+                        .fontWeight(a11y.boldText ? .bold : .regular)
+                    SystemMenuBarBatteryIcon(
+                        percentage: pct,
+                        isCharging: charging,
+                        accessibility: a11y
+                    )
                 }
-            case .batteryPercent, .boltWatts, .batteryBolt:
-                HStack(spacing: 3) {
-                    if let symbol {
-                        Image(systemName: symbol)
-                            .symbolRenderingMode(.hierarchical)
-                    }
-                    if !text.isEmpty {
-                        Text(text)
-                            .monospacedDigit()
-                    }
-                }
+            case .watts:
+                Text(viewModel.menuBarWattsLabel)
+                    .monospacedDigit()
+                    .fontWeight(a11y.boldText ? .bold : .regular)
+            case .both:
+                // One template image — MenuBarExtra drops trailing views in wide HStacks.
+                Image(nsImage: SystemMenuBarBatteryIcon.makeBothLabelImage(
+                    bothText: viewModel.menuBarBothText,
+                    percentage: pct,
+                    isCharging: charging,
+                    accessibility: a11y
+                ))
+                .renderingMode(.template)
             }
         }
-        // Keep observation tied to live battery fields (not only derived strings).
+        .fixedSize()
         .accessibilityLabel(Text(accessibilityLabel))
     }
 

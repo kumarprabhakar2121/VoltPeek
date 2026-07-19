@@ -61,81 +61,22 @@ final class BatteryViewModel {
         menuBarEpoch &+= 1
     }
 
-    /// Battery fill symbol (no bolt).
-    var menuBarBatteryFillSymbolName: String {
-        let pct = max(0, min(100, battery.percentage))
-        switch pct {
-        case ...5: return "battery.0percent"
-        case 6...24: return "battery.25percent"
-        case 25...49: return "battery.50percent"
-        case 50...74: return "battery.75percent"
-        default: return "battery.100percent"
-        }
+    /// Signed watts string for Watts / Both menu bar styles.
+    var menuBarWattsText: String {
+        guard let watts = battery.watts else { return "—" }
+        let sign = watts > 0 ? "+" : ""
+        return String(format: "%@%.0fW", sign, watts)
     }
 
-    /// Symbol for the active menu bar style.
-    var menuBarSymbolName: String? {
-        switch settingsManager.menuBarStyle {
-        case .text:
-            return nil
-        case .battery, .batteryPercent:
-            return menuBarBatteryFillSymbolName
-        case .bolt, .boltWatts:
-            return "bolt.fill"
-        case .batteryBolt:
-            return battery.isCharging ? "battery.100percent.bolt" : menuBarBatteryFillSymbolName
-        }
+    /// Watts label with power emoji: `⚡ +42W`.
+    var menuBarWattsLabel: String {
+        "⚡ \(menuBarWattsText)"
     }
 
-    /// Text beside the menu bar icon (may be empty).
-    var menuBarAccessoryText: String {
-        switch settingsManager.menuBarStyle {
-        case .text:
-            return menuBarTitleText
-        case .battery, .bolt:
-            return ""
-        case .batteryPercent, .batteryBolt:
-            return "\(battery.percentage)%"
-        case .boltWatts:
-            if let watts = battery.watts {
-                let sign = watts > 0 ? "+" : ""
-                return String(format: "%@%.0fW", sign, watts)
-            }
-            return "—"
-        }
+    /// Both-style text before the battery glyph: `⚡ +42W · 75%`.
+    var menuBarBothText: String {
+        "\(menuBarWattsLabel) · \(battery.percentage)%"
     }
-
-    /// Legacy combined title for text-only mode.
-    var menuBarText: String { menuBarAccessoryText.isEmpty ? " " : menuBarAccessoryText }
-
-    private var menuBarTitleText: String {
-        let showWatts = settingsManager.showWattsInMenuBar
-        let showPercent = settingsManager.showPercentageInMenuBar
-        let watts = battery.watts
-
-        var parts: [String] = []
-
-        if showWatts, let watts {
-            let sign = watts >= 0 ? "+" : ""
-            parts.append(String(format: "⚡ %@%.0fW", sign, watts))
-        }
-
-        if showPercent {
-            parts.append(String(format: "🔋 %d%%", battery.percentage))
-        }
-
-        if parts.isEmpty {
-            if let watts {
-                let sign = watts >= 0 ? "+" : ""
-                return String(format: "⚡ %@%.0fW", sign, watts)
-            }
-            return String(format: "🔋 %d%%", battery.percentage)
-        }
-
-        return parts.joined(separator: " ")
-    }
-
-    var menuBarTitle: String { menuBarText }
 
     // MARK: - Display helpers
 

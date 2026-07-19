@@ -11,6 +11,7 @@
 		2E34D0B5CFD26DE001E5C3BD /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E7297D504F69D3B34D2D67 /* AboutView.swift */; };
 		3145ABB60F6DB7CF0442E228 /* ThemeProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9650F2B0CCC1BAB735592A99 /* ThemeProfile.swift */; };
 		48EB7C426FA264AB738B7932 /* WattageSparklineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2298B7E8B348AE538752BF7 /* WattageSparklineView.swift */; };
+		A1B2C3D4E5F60718293A4B5C /* SystemMenuBarBatteryIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1E2F3A4B5C60718293A4B5C /* SystemMenuBarBatteryIcon.swift */; };
 		492F59A5418AB7BF49B3F124 /* CompactPopoverLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFEE1B5032BA438801BCF40 /* CompactPopoverLayout.swift */; };
 		5BCB6383D7F226452018B33F /* ChargerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2270CC3F170A118C75BA76 /* ChargerInfo.swift */; };
 		626B00DA511AD7E7E75CD5D6 /* PowerSourceReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228841A11BE78873903EDF18 /* PowerSourceReader.swift */; };
@@ -62,6 +63,7 @@
 		AA10BD7392E90D5D5675B847 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		AF14936574FE0BD502B33197 /* PopoverThemeStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverThemeStyle.swift; sourceTree = "<group>"; };
 		B2298B7E8B348AE538752BF7 /* WattageSparklineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WattageSparklineView.swift; sourceTree = "<group>"; };
+		D1E2F3A4B5C60718293A4B5C /* SystemMenuBarBatteryIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMenuBarBatteryIcon.swift; sourceTree = "<group>"; };
 		BD2270CC3F170A118C75BA76 /* ChargerInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargerInfo.swift; sourceTree = "<group>"; };
 		CA4D811CAD506F9242695781 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D37915BBA20EFB211A81CC96 /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				6835375639A5400BD4CC3D71 /* BatteryHeroHeader.swift */,
+				D1E2F3A4B5C60718293A4B5C /* SystemMenuBarBatteryIcon.swift */,
 				B2298B7E8B348AE538752BF7 /* WattageSparklineView.swift */,
 			);
 			path = Components;
@@ -318,6 +321,7 @@
 				626B00DA511AD7E7E75CD5D6 /* PowerSourceReader.swift in Sources */,
 				CB93FABE3A22F66FCA599A80 /* SettingsManager.swift in Sources */,
 				6FB1372ABE660F9FE8A3E810 /* SettingsView.swift in Sources */,
+				A1B2C3D4E5F60718293A4B5C /* SystemMenuBarBatteryIcon.swift in Sources */,
 				CA7D2DBB10BF3744B39F22B7 /* ThemeContentHelpers.swift in Sources */,
 				3145ABB60F6DB7CF0442E228 /* ThemeProfile.swift in Sources */,
 				C3CED0550B552F88AE9C9AFD /* VoltPeekApp.swift in Sources */,
