@@ -134,10 +134,22 @@ final class BatteryViewModel {
         return .secondary
     }
 
-    /// Time-to-full / time-to-empty, or a short calculating message when IOKit has no estimate.
+    /// Time-to-full / time-to-empty, or a short status when IOKit has no estimate.
     func displayTimeRemaining() -> String {
+        Self.timeRemainingLabel(for: battery)
+    }
+
+    /// Pure display logic for time remaining (testable without IOKit).
+    nonisolated static func timeRemainingLabel(for battery: BatteryInfo) -> String {
         if let value = battery.timeRemaining, !value.isEmpty {
             return value
+        }
+        if battery.isFullyCharged
+            || (battery.isOnACPower && !battery.isCharging && battery.percentage >= 100) {
+            return "Fully charged"
+        }
+        if battery.isOnACPower && !battery.isCharging {
+            return "On AC power"
         }
         return battery.isCharging ? "Calculating time to full…" : "Calculating time left…"
     }

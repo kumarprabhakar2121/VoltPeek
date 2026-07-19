@@ -117,7 +117,9 @@ struct PowerSourceReader: Sendable {
         let watts: Double? = {
             guard let v = voltage, let a = currentAmps else { return nil }
             let w = v * a
-            return abs(w) > 0.05 ? w : nil
+            // Near-zero pack draw (typical when fully charged on AC) is a real 0 W,
+            // not a missing reading — keep it so the UI doesn't show "Unavailable".
+            return abs(w) > 0.05 ? w : 0
         }()
 
         let health: Double? = {

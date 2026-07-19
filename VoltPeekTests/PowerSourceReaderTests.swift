@@ -147,13 +147,13 @@ final class PowerSourceReaderTests: XCTestCase {
         XCTAssertNil(battery.deviceName)
     }
 
-    func testMapBatteryIgnoresNegligibleWatts() {
+    func testMapBatteryReportsNegligibleWattsAsZero() {
         let smartBattery: [String: Any] = [
             "Voltage": 12000,
             "Amperage": 2 // 0.002 A → ~0.024 W
         ]
         let battery = PowerSourceReader.mapBattery(powerSource: [:], smartBattery: smartBattery)
-        XCTAssertNil(battery.watts)
+        XCTAssertEqual(battery.watts!, 0, accuracy: 0.001)
     }
 
     func testFormatTimeRemainingMinutesOnly() {

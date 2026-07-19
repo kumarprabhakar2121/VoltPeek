@@ -34,6 +34,7 @@
 		D4879917B61094074E153060 /* PopoverThemeStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF14936574FE0BD502B33197 /* PopoverThemeStyle.swift */; };
 		D5A7CA5355E91168A8D3EB51 /* AppDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B718CB287AB35BE17C2CA5 /* AppDiagnostics.swift */; };
 		DDA8BA64495D2ADD045884BD /* PowerSourceReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9060C367461BA066E8B790AA /* PowerSourceReaderTests.swift */; };
+		E1A2B3C4D5E6F708192A3B4C /* BatteryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E6F708192A3B4C /* BatteryViewModelTests.swift */; };
 		DE4D68978A6952A5FA88D716 /* BatteryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107C87EF6929AB8C02EA0077 /* BatteryInfo.swift */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +65,7 @@
 		727258B1649F08CA8F05F5E3 /* VoltPeekApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoltPeekApp.swift; sourceTree = "<group>"; };
 		7DBD859A1CB5288B22A212B2 /* VoltPeekTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoltPeekTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9060C367461BA066E8B790AA /* PowerSourceReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerSourceReaderTests.swift; sourceTree = "<group>"; };
+		F1A2B3C4D5E6F708192A3B4C /* BatteryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryViewModelTests.swift; sourceTree = "<group>"; };
 		9650F2B0CCC1BAB735592A99 /* ThemeProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeProfile.swift; sourceTree = "<group>"; };
 		9734ADFBEB981282456B6221 /* GraphSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphSettingsView.swift; sourceTree = "<group>"; };
 		A0C6A7C48239FE2F0C9E99DE /* DiagnosticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticsView.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 			children = (
 				2E5BCAC7D39298606BEEA192 /* AppDiagnosticsTests.swift */,
 				05E01B281C1D952F22451686 /* AppSettingsTests.swift */,
+				F1A2B3C4D5E6F708192A3B4C /* BatteryViewModelTests.swift */,
 				9060C367461BA066E8B790AA /* PowerSourceReaderTests.swift */,
 			);
 			path = VoltPeekTests;
@@ -306,6 +309,7 @@
 			files = (
 				3E46BA58C426C7F9B8DBB7AA /* AppDiagnosticsTests.swift in Sources */,
 				A4CC2D7F16EDE40A1117B83C /* AppSettingsTests.swift in Sources */,
+				E1A2B3C4D5E6F708192A3B4C /* BatteryViewModelTests.swift in Sources */,
 				DDA8BA64495D2ADD045884BD /* PowerSourceReaderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
