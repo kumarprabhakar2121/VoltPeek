@@ -6,7 +6,9 @@ VoltPeek is a native macOS menu bar app for MacBooks that surfaces the charging 
 
 Built for developers and power users who want to know *how* the pack is charging, not just that it is.
 
-**Requirements:** macOS 14+ · Apple Silicon or Intel · no account, no network
+**Safe & fully offline.** VoltPeek never connects to the internet, never phones home, and never reads your files, photos, messages, or accounts. It only reads battery and power info that macOS already exposes locally. Open source under MIT — you can inspect every line.
+
+**Requirements:** macOS 14+ · Apple Silicon or Intel · no account · no network
 
 Support: [hello@voltpeek.app](mailto:hello@voltpeek.app)
 
@@ -68,7 +70,11 @@ Details: [docs/HOMEBREW.md](docs/HOMEBREW.md).
 
 ### First launch (macOS blocks the app)
 
-VoltPeek is not Apple-notarized yet. On first open you may see:
+**This warning is about signing, not about malware.** VoltPeek is safe to open. It is a completely offline app: no internet access, no analytics, no account, and no access to your personal data — only local battery readings.
+
+Apple shows this dialog because the download is not notarized yet (that needs a paid Apple Developer certificate). The message does **not** mean the app was scanned and found harmful.
+
+On first open you may see:
 
 > **"VoltPeek.app" Not Opened**  
 > Apple could not verify "VoltPeek.app" is free of malware…
@@ -112,9 +118,18 @@ Build and run the **VoltPeek** scheme. The app appears in the menu bar only.
 
 ---
 
-## Privacy
+## Privacy & safety
 
-VoltPeek reads battery data **locally** via IOKit / IOPowerSources. It does not collect analytics, sell data, or require sign-in.
+VoltPeek is designed to be trustworthy and private by default:
+
+| | |
+| --- | --- |
+| **Offline** | No network calls. Works with Wi‑Fi and Ethernet off. |
+| **No accounts** | Nothing to sign in to. |
+| **No tracking** | No analytics, ads, telemetry, or crash uploaders. |
+| **No personal data** | Does not read your files, photos, contacts, messages, or keychain. |
+| **Local only** | Battery/power info via IOKit / IOPowerSources on your Mac. |
+| **Open source** | MIT — review the code yourself. |
 
 - Policy: [docs/PRIVACY.md](docs/PRIVACY.md)
 - **App Store Privacy URL:** https://kumarprabhakar2121.github.io/VoltPeek/privacy.html
