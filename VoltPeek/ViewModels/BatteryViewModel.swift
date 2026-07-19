@@ -8,11 +8,15 @@ final class BatteryViewModel {
     let batteryService: BatteryService
     let settingsManager: SettingsManager
 
-    private var intervalObservationTask: Task<Void, Never>?
+    /// Mirrored from `BatteryService` so MenuBarExtra / popover observe this object directly.
+    private(set) var battery: BatteryInfo = .unavailable
+    private(set) var charger: ChargerInfo = .unavailable
+    private(set) var wattageHistory: [WattageSample] = []
+    private(set) var lastUpdated: Date?
+    /// Bumps on every successful poll so MenuBarExtra labels can `.id` against it.
+    private(set) var menuBarEpoch: UInt64 = 0
 
-    var battery: BatteryInfo { batteryService.battery }
-    var charger: ChargerInfo { batteryService.charger }
-    var wattageHistory: [WattageSample] { batteryService.wattageHistory }
+    private var intervalObservationTask: Task<Void, Never>?
 
     init(
         batteryService: BatteryService? = nil,
@@ -20,6 +24,10 @@ final class BatteryViewModel {
     ) {
         self.batteryService = batteryService ?? BatteryService()
         self.settingsManager = settingsManager ?? SettingsManager()
+        self.batteryService.onUpdate = { [weak self] in
+            self?.pullFromService()
+        }
+        pullFromService()
     }
 
     func start() {
@@ -43,6 +51,14 @@ final class BatteryViewModel {
         intervalObservationTask?.cancel()
         intervalObservationTask = nil
         batteryService.stopPolling()
+    }
+
+    private func pullFromService() {
+        battery = batteryService.battery
+        charger = batteryService.charger
+        wattageHistory = batteryService.wattageHistory
+        lastUpdated = batteryService.lastUpdated
+        menuBarEpoch &+= 1
     }
 
     /// Battery fill symbol (no bolt).
@@ -200,12 +216,52 @@ final class BatteryViewModel {
         return value
     }
 
+    /// Time-to-full / time-to-empty, or a short calculating message when IOKit has no estimate.
+    func displayTimeRemaining() -> String {
+        if let value = battery.timeRemaining, !value.isEmpty {
+            return value
+        }
+        return battery.isCharging ? "Calculating time to full…" : "Calculating time left…"
+    }
+
+    /// Clears history and forces a fresh IOKit read into the UI.
+    func refreshNow() {
+        batteryService.forceRefresh()
+    }
+
+    /// Wear as percent lost from design (from health, or max/design).
+    var wearPercent: Double? {
+        if let health = battery.health {
+            return Swift.max(0, 100.0 - health)
+        }
+        guard let maxCapacity = battery.maxCapacity,
+              let design = battery.designCapacity,
+              design > 0 else {
+            return nil
+        }
+        return Swift.max(0, (1.0 - Double(maxCapacity) / Double(design)) * 100.0)
+    }
+
+    func displayWear(_ value: Double?) -> String {
+        guard let value else { return "Unavailable" }
+        return String(format: "%.0f%%", value)
+    }
+
+    /// `Now current · Max max mAh` when both capacities exist.
+    var displayCapacityPair: String? {
+        guard let current = battery.currentCapacity, let max = battery.maxCapacity else { return nil }
+        return "Now \(current) · Max \(max) mAh"
+    }
+
     var chargingStatusText: String {
+        if battery.isFullyCharged || (battery.isOnACPower && !battery.isCharging && battery.percentage >= 100) {
+            return "Fully Charged"
+        }
         if battery.isCharging {
             return "Charging"
         }
         if battery.isOnACPower {
-            return "On AC Power"
+            return "On AC Power (not charging)"
         }
         return "Discharging"
     }

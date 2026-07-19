@@ -132,10 +132,23 @@ struct PowerSourceReader: Sendable {
 
         let temperatureCelsius = resolveTemperatureCelsius(smartBattery: smartBattery)
 
+        let isFullyCharged = boolValue(smartBattery["FullyCharged"])
+            ?? boolValue(powerSource[kIOPSIsChargedKey])
+            ?? (percentage >= 100 && !isCharging && isOnACPower)
+
+        let manufacturer = stringValue(smartBattery["Manufacturer"])
+            ?? stringValue(smartBattery["BatteryManufacturer"])
+        let serialNumber = stringValue(smartBattery["BatterySerialNumber"])
+            ?? stringValue(smartBattery["Serial"])
+            ?? stringValue(smartBattery["SerialNumber"])
+        let deviceName = stringValue(smartBattery["DeviceName"])
+            ?? stringValue(powerSource[kIOPSNameKey])
+
         return BatteryInfo(
             percentage: percentage,
             isCharging: isCharging,
             isOnACPower: isOnACPower,
+            isFullyCharged: isFullyCharged,
             currentCapacity: currentCapacity,
             maxCapacity: maxCapacity,
             designCapacity: designCapacity,
@@ -145,7 +158,10 @@ struct PowerSourceReader: Sendable {
             watts: watts,
             health: health,
             timeRemaining: timeRemaining,
-            temperatureCelsius: temperatureCelsius
+            temperatureCelsius: temperatureCelsius,
+            manufacturer: manufacturer,
+            serialNumber: serialNumber,
+            deviceName: deviceName
         )
     }
 
@@ -160,6 +176,9 @@ struct PowerSourceReader: Sendable {
 
         var adapterName: String?
         var adapterWatts: Double?
+        var adapterVoltage: Double?
+        var adapterAmperage: Double?
+        var adapterManufacturer: String?
 
         let detailSources: [[String: Any]] = [
             dictionary(from: smartBattery["AdapterDetails"]),
@@ -170,13 +189,30 @@ struct PowerSourceReader: Sendable {
             if adapterName == nil {
                 adapterName = stringValue(details["Name"])
                     ?? stringValue(details["Description"])
-                    ?? stringValue(details["Manufacturer"])
+            }
+            if adapterManufacturer == nil {
+                adapterManufacturer = stringValue(details["Manufacturer"])
             }
             if adapterWatts == nil {
                 adapterWatts = doubleValue(details["Watts"])
                     ?? doubleValue(details["AdapterPower"])
                     ?? doubleValue(details["Wattage"])
             }
+            if adapterVoltage == nil {
+                // Often millivolts in adapter details.
+                if let mv = doubleValue(details["AdapterVoltage"]) ?? doubleValue(details["Voltage"]) {
+                    adapterVoltage = mv > 100 ? mv / 1000.0 : mv
+                }
+            }
+            if adapterAmperage == nil {
+                if let ma = doubleValue(details["Current"]) ?? doubleValue(details["Amperage"]) {
+                    adapterAmperage = abs(ma) > 20 ? ma / 1000.0 : ma
+                }
+            }
+        }
+
+        if adapterName == nil, let manufacturer = adapterManufacturer {
+            adapterName = manufacturer
         }
 
         if adapterWatts == nil {
@@ -192,7 +228,10 @@ struct PowerSourceReader: Sendable {
         return ChargerInfo(
             connected: connected,
             adapterName: adapterName,
-            adapterWatts: adapterWatts
+            adapterWatts: adapterWatts,
+            adapterVoltage: adapterVoltage,
+            adapterAmperage: adapterAmperage,
+            adapterManufacturer: adapterManufacturer
         )
     }
 

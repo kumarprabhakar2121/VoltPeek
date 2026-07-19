@@ -30,7 +30,7 @@ struct LiquidGlassPopoverLayout: View {
                     VStack(alignment: .leading, spacing: 6 * scale) {
                         SignedPowerBadge(viewModel: viewModel)
                         StatusChip(text: viewModel.chargingStatusText, tint: tint)
-                        Text(viewModel.displayOptionalString(viewModel.battery.timeRemaining))
+                        Text(viewModel.displayTimeRemaining())
                             .font(type.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -57,25 +57,16 @@ struct LiquidGlassPopoverLayout: View {
             }
 
             GlassPanel {
-                VStack(alignment: .leading, spacing: 8 * scale) {
+                VStack(alignment: .leading, spacing: 4 * scale) {
                     Text("Health")
                         .font(type.caption)
                         .foregroundStyle(.secondary)
                         .textCase(.uppercase)
                         .tracking(0.4)
-                    HStack {
-                        Text(viewModel.displayHealth(viewModel.battery.health))
-                            .font(type.metric)
-                            .foregroundStyle(PopoverThemeStyle.healthColor(viewModel.battery.health))
-                        Spacer()
-                        Text("\(viewModel.display(viewModel.battery.cycleCount)) cycles")
-                            .font(type.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    HealthBar(health: viewModel.battery.health, height: 6 * scale)
-                    Text("Max \(ThemeContentHelpers.capacityText(viewModel.battery.maxCapacity))")
+                    Text(ThemeContentHelpers.passiveHealthSummary(viewModel: viewModel))
                         .font(type.caption)
                         .foregroundStyle(.secondary)
+                        .monospacedDigit()
                 }
             }
 
@@ -87,23 +78,32 @@ struct LiquidGlassPopoverLayout: View {
                         .textCase(.uppercase)
                         .tracking(0.4)
                     if viewModel.charger.connected {
-                        Text("Connected")
-                            .font(type.metric)
+                        InfoRow(label: "Status", value: "Connected")
                         if let detail = ThemeContentHelpers.adapterDetail(viewModel: viewModel) {
-                            Text(detail)
-                                .font(type.body)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(2)
-                                .minimumScaleFactor(0.8)
+                            InfoRow(label: "Adapter", value: detail)
+                        }
+                        if viewModel.charger.adapterVoltage != nil {
+                            InfoRow(
+                                label: "Voltage",
+                                value: viewModel.displayVoltage(viewModel.charger.adapterVoltage)
+                            )
+                        }
+                        if viewModel.charger.adapterAmperage != nil {
+                            InfoRow(
+                                label: "Current",
+                                value: viewModel.displayCurrent(viewModel.charger.adapterAmperage)
+                            )
+                        }
+                        if let manufacturer = ThemeContentHelpers.adapterManufacturer(viewModel: viewModel) {
+                            InfoRow(label: "Manufacturer", value: manufacturer)
                         }
                     } else {
-                        Text("Unplugged")
-                            .font(type.metric)
+                        InfoRow(label: "Status", value: "Unplugged")
                     }
                 }
             }
 
-            PopoverFooter()
+            PopoverFooter(viewModel: viewModel)
         }
         .padding(14 * scale)
         .frame(width: profile.baseWidth * scale)

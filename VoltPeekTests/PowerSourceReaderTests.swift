@@ -16,8 +16,13 @@ final class PowerSourceReaderTests: XCTestCase {
             "InstantAmperage": 3640,   // mA
             "CycleCount": 312,
             "DesignCapacity": 5000,
+            "AppleRawCurrentCapacity": 3690,
             "AppleRawMaxCapacity": 4500,
             "ExternalConnected": true,
+            "FullyCharged": false,
+            "Manufacturer": "SMP",
+            "BatterySerialNumber": "D1234567890",
+            "DeviceName": "bq20z451",
             "Temperature": 30915       // centi-Kelvin ≈ 36°C
         ]
 
@@ -29,8 +34,10 @@ final class PowerSourceReaderTests: XCTestCase {
         XCTAssertEqual(battery.percentage, 82)
         XCTAssertTrue(battery.isCharging)
         XCTAssertTrue(battery.isOnACPower)
+        XCTAssertFalse(battery.isFullyCharged)
         XCTAssertEqual(battery.cycleCount, 312)
         XCTAssertEqual(battery.designCapacity, 5000)
+        XCTAssertEqual(battery.currentCapacity, 3690)
         XCTAssertEqual(battery.maxCapacity, 4500)
         XCTAssertEqual(battery.voltage!, 12.65, accuracy: 0.001)
         XCTAssertEqual(battery.current!, 3.64, accuracy: 0.001)
@@ -39,6 +46,23 @@ final class PowerSourceReaderTests: XCTestCase {
         XCTAssertEqual(battery.health!, 90.0, accuracy: 0.1)
         XCTAssertEqual(battery.timeRemaining, "1 h 35 min")
         XCTAssertEqual(battery.temperatureCelsius!, 36.0, accuracy: 0.2)
+        XCTAssertEqual(battery.manufacturer, "SMP")
+        XCTAssertEqual(battery.serialNumber, "D1234567890")
+        XCTAssertEqual(battery.deviceName, "bq20z451")
+    }
+
+    func testMapBatteryFullyChargedFromSmartBattery() {
+        let battery = PowerSourceReader.mapBattery(
+            powerSource: [
+                kIOPSCurrentCapacityKey: 100,
+                kIOPSIsChargingKey: false,
+                kIOPSPowerSourceStateKey: kIOPSACPowerValue
+            ],
+            smartBattery: ["FullyCharged": true, "ExternalConnected": true]
+        )
+        XCTAssertTrue(battery.isFullyCharged)
+        XCTAssertTrue(battery.isOnACPower)
+        XCTAssertFalse(battery.isCharging)
     }
 
     func testMapBatterySignedDischargeWatts() {
@@ -74,6 +98,9 @@ final class PowerSourceReaderTests: XCTestCase {
         let details = NSMutableDictionary()
         details["Name"] = "140W USB-C Power Adapter"
         details["Watts"] = NSNumber(value: 140)
+        details["AdapterVoltage"] = NSNumber(value: 28000) // mV
+        details["Current"] = NSNumber(value: 5000) // mA
+        details["Manufacturer"] = "Apple Inc."
 
         let smartBattery: [String: Any] = [
             "ExternalConnected": true,
@@ -88,6 +115,9 @@ final class PowerSourceReaderTests: XCTestCase {
         XCTAssertTrue(charger.connected)
         XCTAssertEqual(charger.adapterName, "140W USB-C Power Adapter")
         XCTAssertEqual(charger.adapterWatts, 140)
+        XCTAssertEqual(charger.adapterVoltage!, 28.0, accuracy: 0.01)
+        XCTAssertEqual(charger.adapterAmperage!, 5.0, accuracy: 0.01)
+        XCTAssertEqual(charger.adapterManufacturer, "Apple Inc.")
     }
 
     func testMapChargerEstimatesWattsFromBatteryWhenDetailsMissing() {
@@ -104,6 +134,7 @@ final class PowerSourceReaderTests: XCTestCase {
 
         XCTAssertEqual(battery.percentage, 0)
         XCTAssertFalse(battery.isCharging)
+        XCTAssertFalse(battery.isFullyCharged)
         XCTAssertNil(battery.cycleCount)
         XCTAssertNil(battery.voltage)
         XCTAssertNil(battery.current)
@@ -111,6 +142,9 @@ final class PowerSourceReaderTests: XCTestCase {
         XCTAssertNil(battery.health)
         XCTAssertNil(battery.timeRemaining)
         XCTAssertNil(battery.temperatureCelsius)
+        XCTAssertNil(battery.manufacturer)
+        XCTAssertNil(battery.serialNumber)
+        XCTAssertNil(battery.deviceName)
     }
 
     func testMapBatteryIgnoresNegligibleWatts() {

@@ -1,8 +1,9 @@
 import SwiftUI
 import AppKit
 
-/// Shared Settings / Quit footer.
+/// Shared Settings / Refresh / Quit footer.
 struct PopoverFooter: View {
+    @Bindable var viewModel: BatteryViewModel
     @Environment(\.openSettings) private var openSettings
     @Environment(\.themeTypography) private var type
     @Environment(\.themeScale) private var scale
@@ -21,20 +22,51 @@ struct PopoverFooter: View {
                     }
                 } label: {
                     Label("Settings…", systemImage: "gear")
-                        .font(type.caption)
                 }
-                .buttonStyle(.borderless)
+                .buttonStyle(PopoverFooterButtonStyle(font: type.caption))
+
+                Spacer()
+
+                Button {
+                    viewModel.refreshNow()
+                } label: {
+                    Label("Refresh", systemImage: "arrow.clockwise")
+                }
+                .buttonStyle(PopoverFooterButtonStyle(font: type.caption))
+                .help("Re-read battery data and clear the power graph")
 
                 Spacer()
 
                 Button("Quit") {
                     NSApplication.shared.terminate(nil)
                 }
-                .font(type.caption)
-                .buttonStyle(.borderless)
+                .buttonStyle(PopoverFooterButtonStyle(font: type.caption))
             }
-            .foregroundStyle(.secondary)
         }
+    }
+}
+
+/// Pointing-hand cursor + hover highlight so footer actions feel clickable.
+private struct PopoverFooterButtonStyle: ButtonStyle {
+    let font: Font
+    @State private var isHovered = false
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(font)
+            .foregroundStyle(isHovered || configuration.isPressed ? Color.primary : Color.secondary)
+            .padding(.horizontal, 4)
+            .padding(.vertical, 2)
+            .contentShape(Rectangle())
+            .opacity(configuration.isPressed ? 0.7 : 1)
+            .onHover { hovering in
+                isHovered = hovering
+                if hovering {
+                    NSCursor.pointingHand.push()
+                } else {
+                    NSCursor.pop()
+                }
+            }
     }
 }
 

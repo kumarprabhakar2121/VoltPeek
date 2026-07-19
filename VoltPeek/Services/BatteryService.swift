@@ -16,6 +16,9 @@ final class BatteryService {
     /// Samples within the last 60 seconds (oldest → newest).
     private(set) var wattageHistory: [WattageSample] = []
 
+    /// Invoked on the main actor after each successful refresh.
+    var onUpdate: (() -> Void)?
+
     private let reader: PowerSourceReader
     private var pollingTask: Task<Void, Never>?
     private var isReading = false
@@ -48,14 +51,28 @@ final class BatteryService {
     /// Performs a single coalesced read from the system.
     func refresh() {
         guard !isReading else { return }
+        performRead(clearHistory: false)
+    }
+
+    /// Clears wattage history and always re-reads IOKit (manual Refresh).
+    func forceRefresh() {
+        performRead(clearHistory: true)
+    }
+
+    private func performRead(clearHistory: Bool) {
         isReading = true
         defer { isReading = false }
+
+        if clearHistory {
+            wattageHistory.removeAll()
+        }
 
         let snapshot = reader.read()
         battery = snapshot.battery
         charger = snapshot.charger
         lastUpdated = Date()
         appendWattageSample(battery.watts)
+        onUpdate?()
     }
 
     private func appendWattageSample(_ watts: Double?) {

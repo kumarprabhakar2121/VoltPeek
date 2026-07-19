@@ -6,6 +6,7 @@ struct BatteryInfo: Equatable, Sendable {
     var percentage: Int
     var isCharging: Bool
     var isOnACPower: Bool
+    var isFullyCharged: Bool
     var currentCapacity: Int?
     var maxCapacity: Int?
     var designCapacity: Int?
@@ -19,11 +20,15 @@ struct BatteryInfo: Equatable, Sendable {
     var timeRemaining: String?
     /// Battery temperature in Celsius when available.
     var temperatureCelsius: Double?
+    var manufacturer: String?
+    var serialNumber: String?
+    var deviceName: String?
 
     static let unavailable = BatteryInfo(
         percentage: 0,
         isCharging: false,
         isOnACPower: false,
+        isFullyCharged: false,
         currentCapacity: nil,
         maxCapacity: nil,
         designCapacity: nil,
@@ -33,6 +38,9 @@ struct BatteryInfo: Equatable, Sendable {
         watts: nil,
         health: nil,
         timeRemaining: nil,
-        temperatureCelsius: nil
+        temperatureCelsius: nil,
+        manufacturer: nil,
+        serialNumber: nil,
+        deviceName: nil
     )
 }

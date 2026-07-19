@@ -32,7 +32,7 @@ struct MaterialPopoverLayout: View {
                     )
                     VStack(alignment: .leading, spacing: 6 * scale) {
                         StatusChip(text: viewModel.chargingStatusText, tint: tint)
-                        Text(viewModel.displayOptionalString(viewModel.battery.timeRemaining))
+                        Text(viewModel.displayTimeRemaining())
                             .font(type.body)
                             .foregroundStyle(.secondary)
                     }
@@ -69,22 +69,12 @@ struct MaterialPopoverLayout: View {
             }
 
             MaterialCard {
-                VStack(alignment: .leading, spacing: 8 * scale) {
+                VStack(alignment: .leading, spacing: 4 * scale) {
                     sectionLabel("Health")
-                    HStack {
-                        Text(viewModel.displayHealth(viewModel.battery.health))
-                            .font(type.heroMetric)
-                            .foregroundStyle(PopoverThemeStyle.healthColor(viewModel.battery.health))
-                        Spacer()
-                        Text("\(viewModel.display(viewModel.battery.cycleCount)) cycles")
-                            .font(type.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    HealthBar(health: viewModel.battery.health, height: 7 * scale)
-                    InfoRow(
-                        label: "Max capacity",
-                        value: ThemeContentHelpers.capacityText(viewModel.battery.maxCapacity)
-                    )
+                    Text(ThemeContentHelpers.passiveHealthSummary(viewModel: viewModel))
+                        .font(type.caption)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
                 }
             }
 
@@ -92,17 +82,32 @@ struct MaterialPopoverLayout: View {
                 VStack(alignment: .leading, spacing: 6 * scale) {
                     sectionLabel("Adapter")
                     if viewModel.charger.connected {
-                        InfoRow(label: "Connected", value: "Yes")
+                        InfoRow(label: "Status", value: "Connected")
                         if let detail = ThemeContentHelpers.adapterDetail(viewModel: viewModel) {
                             InfoRow(label: "Adapter", value: detail)
                         }
+                        if viewModel.charger.adapterVoltage != nil {
+                            InfoRow(
+                                label: "Voltage",
+                                value: viewModel.displayVoltage(viewModel.charger.adapterVoltage)
+                            )
+                        }
+                        if viewModel.charger.adapterAmperage != nil {
+                            InfoRow(
+                                label: "Current",
+                                value: viewModel.displayCurrent(viewModel.charger.adapterAmperage)
+                            )
+                        }
+                        if let manufacturer = ThemeContentHelpers.adapterManufacturer(viewModel: viewModel) {
+                            InfoRow(label: "Manufacturer", value: manufacturer)
+                        }
                     } else {
-                        InfoRow(label: "Connected", value: "Unplugged")
+                        InfoRow(label: "Status", value: "Unplugged")
                     }
                 }
             }
 
-            PopoverFooter()
+            PopoverFooter(viewModel: viewModel)
         }
         .padding(12 * scale)
         .frame(width: profile.baseWidth * scale)

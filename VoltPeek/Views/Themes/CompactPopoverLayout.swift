@@ -22,7 +22,7 @@ struct CompactPopoverLayout: View {
                         .fontWeight(a11y.boldText ? .bold : .semibold)
                         .foregroundStyle(.secondary)
                 }
-                Text(viewModel.displayOptionalString(viewModel.battery.timeRemaining))
+                Text(viewModel.displayTimeRemaining())
                     .font(type.caption)
                     .foregroundStyle(.secondary.opacity(a11y.secondaryOpacity))
             }
@@ -47,13 +47,11 @@ struct CompactPopoverLayout: View {
             }
 
             group("Health") {
-                metricRow(
-                    "Health",
-                    viewModel.displayHealth(viewModel.battery.health),
-                    color: PopoverThemeStyle.healthColor(viewModel.battery.health)
-                )
-                metricRow("Cycles", viewModel.display(viewModel.battery.cycleCount))
-                metricRow("Max capacity", ThemeContentHelpers.capacityText(viewModel.battery.maxCapacity))
+                Text(ThemeContentHelpers.passiveHealthSummary(viewModel: viewModel))
+                    .font(type.caption)
+                    .foregroundStyle(.secondary.opacity(a11y.secondaryOpacity))
+                    .monospacedDigit()
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
 
             group("Adapter") {
@@ -62,12 +60,21 @@ struct CompactPopoverLayout: View {
                     if let detail = ThemeContentHelpers.adapterDetail(viewModel: viewModel) {
                         metricRow("Adapter", detail)
                     }
+                    if viewModel.charger.adapterVoltage != nil {
+                        metricRow("Voltage", viewModel.displayVoltage(viewModel.charger.adapterVoltage))
+                    }
+                    if viewModel.charger.adapterAmperage != nil {
+                        metricRow("Current", viewModel.displayCurrent(viewModel.charger.adapterAmperage))
+                    }
+                    if let manufacturer = ThemeContentHelpers.adapterManufacturer(viewModel: viewModel) {
+                        metricRow("Manufacturer", manufacturer)
+                    }
                 } else {
                     metricRow("Status", "Unplugged")
                 }
             }
 
-            PopoverFooter()
+            PopoverFooter(viewModel: viewModel)
         }
         .padding(12 * scale)
         .frame(width: profile.baseWidth * scale)
