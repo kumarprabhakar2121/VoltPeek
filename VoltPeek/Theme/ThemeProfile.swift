@@ -1,23 +1,7 @@
 import SwiftUI
 
-/// Layout DNA for each popover theme — not just a color skin.
-enum ThemeLayoutKind: Sendable {
-    case list
-    case healthTiles
-    case glassDashboard
-}
-
-enum ThemeSurfaceStyle: Sendable {
-    case opaque
-    case elevated
-    case glass
-}
-
-/// Token set + layout kind that completely drives how a theme renders.
+/// Token set that drives how a theme renders.
 struct ThemeProfile: Sendable {
-    let layout: ThemeLayoutKind
-    let surface: ThemeSurfaceStyle
-    let accent: Color
     let cornerRadius: CGFloat
     let baseWidth: CGFloat
     let sectionSpacing: CGFloat
@@ -26,27 +10,18 @@ struct ThemeProfile: Sendable {
         switch theme {
         case .compact:
             return ThemeProfile(
-                layout: .list,
-                surface: .opaque,
-                accent: Color(red: 0.043, green: 0.561, blue: 0.416),
                 cornerRadius: 0,
                 baseWidth: 288,
                 sectionSpacing: 7
             )
         case .material:
             return ThemeProfile(
-                layout: .healthTiles,
-                surface: .elevated,
-                accent: Color(red: 0.043, green: 0.561, blue: 0.416),
                 cornerRadius: 14,
                 baseWidth: 312,
                 sectionSpacing: 12
             )
         case .liquidGlass:
             return ThemeProfile(
-                layout: .glassDashboard,
-                surface: .glass,
-                accent: Color(red: 0.35, green: 0.72, blue: 0.95),
                 cornerRadius: 18,
                 baseWidth: 336,
                 sectionSpacing: 14
@@ -121,10 +96,6 @@ private struct ThemeScaleKey: EnvironmentKey {
     static let defaultValue: CGFloat = 1.0
 }
 
-private struct ThemeFontMultiplierKey: EnvironmentKey {
-    static let defaultValue: CGFloat = 1.0
-}
-
 private struct ThemeProfileKey: EnvironmentKey {
     static let defaultValue = ThemeProfile.profile(for: .compact)
 }
@@ -145,11 +116,6 @@ extension EnvironmentValues {
     var themeScale: CGFloat {
         get { self[ThemeScaleKey.self] }
         set { self[ThemeScaleKey.self] = newValue }
-    }
-
-    var themeFontMultiplier: CGFloat {
-        get { self[ThemeFontMultiplierKey.self] }
-        set { self[ThemeFontMultiplierKey.self] = newValue }
     }
 
     var themeProfile: ThemeProfile {
@@ -188,7 +154,6 @@ extension View {
         )
         return environment(\.themeProfile, ThemeProfile.profile(for: theme))
             .environment(\.themeScale, uiScale.multiplier)
-            .environment(\.themeFontMultiplier, fontSize.multiplier)
             .environment(\.themeAccessibility, a11y)
             .environment(\.themeTypography, typography)
     }

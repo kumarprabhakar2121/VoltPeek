@@ -7,8 +7,6 @@ import ServiceManagement
 final class SettingsManager {
     private enum Keys {
         static let refreshInterval = "refreshIntervalSeconds"
-        static let showWatts = "showWattsInMenuBar"
-        static let showPercentage = "showPercentageInMenuBar"
         static let launchAtLogin = "launchAtLogin"
         static let popoverTheme = "popoverTheme"
         static let fontSize = "fontSizePreference"
@@ -33,14 +31,6 @@ final class SettingsManager {
             }
             defaults.set(clamped, forKey: Keys.refreshInterval)
         }
-    }
-
-    var showWattsInMenuBar: Bool {
-        didSet { defaults.set(showWattsInMenuBar, forKey: Keys.showWatts) }
-    }
-
-    var showPercentageInMenuBar: Bool {
-        didSet { defaults.set(showPercentageInMenuBar, forKey: Keys.showPercentage) }
     }
 
     var launchAtLogin: Bool {
@@ -105,21 +95,6 @@ final class SettingsManager {
         )
     }
 
-    var settings: AppSettings {
-        AppSettings(
-            refreshIntervalSeconds: refreshIntervalSeconds,
-            showWattsInMenuBar: showWattsInMenuBar,
-            showPercentageInMenuBar: showPercentageInMenuBar,
-            launchAtLogin: launchAtLogin,
-            popoverTheme: popoverTheme,
-            fontSize: fontSize,
-            uiScale: uiScale,
-            accessibility: accessibility,
-            menuBarStyle: menuBarStyle,
-            menuBarBatteryAppearance: menuBarBatteryAppearance
-        )
-    }
-
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
 
@@ -132,18 +107,6 @@ final class SettingsManager {
             storedInterval = AppSettings.default.refreshIntervalSeconds
         }
         self.refreshIntervalSeconds = AppSettings.clampedInterval(storedInterval)
-
-        if defaults.object(forKey: Keys.showWatts) == nil {
-            self.showWattsInMenuBar = AppSettings.default.showWattsInMenuBar
-        } else {
-            self.showWattsInMenuBar = defaults.bool(forKey: Keys.showWatts)
-        }
-
-        if defaults.object(forKey: Keys.showPercentage) == nil {
-            self.showPercentageInMenuBar = AppSettings.default.showPercentageInMenuBar
-        } else {
-            self.showPercentageInMenuBar = defaults.bool(forKey: Keys.showPercentage)
-        }
 
         if let raw = defaults.string(forKey: Keys.popoverTheme),
            let theme = PopoverTheme(rawValue: raw) {
@@ -219,8 +182,6 @@ final class SettingsManager {
         let defaultsSettings = AppSettings.default
 
         refreshIntervalSeconds = defaultsSettings.refreshIntervalSeconds
-        showWattsInMenuBar = defaultsSettings.showWattsInMenuBar
-        showPercentageInMenuBar = defaultsSettings.showPercentageInMenuBar
         popoverTheme = defaultsSettings.popoverTheme
         fontSize = defaultsSettings.fontSize
         uiScale = defaultsSettings.uiScale

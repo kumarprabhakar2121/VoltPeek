@@ -12,7 +12,6 @@ final class BatteryViewModel {
     private(set) var battery: BatteryInfo = .unavailable
     private(set) var charger: ChargerInfo = .unavailable
     private(set) var wattageHistory: [WattageSample] = []
-    private(set) var lastUpdated: Date?
     /// Bumps on every successful poll so MenuBarExtra labels can `.id` against it.
     private(set) var menuBarEpoch: UInt64 = 0
 
@@ -47,17 +46,10 @@ final class BatteryViewModel {
         }
     }
 
-    func stop() {
-        intervalObservationTask?.cancel()
-        intervalObservationTask = nil
-        batteryService.stopPolling()
-    }
-
     private func pullFromService() {
         battery = batteryService.battery
         charger = batteryService.charger
         wattageHistory = batteryService.wattageHistory
-        lastUpdated = batteryService.lastUpdated
         menuBarEpoch &+= 1
     }
 
@@ -66,16 +58,6 @@ final class BatteryViewModel {
         guard let watts = battery.watts else { return "—" }
         let sign = watts > 0 ? "+" : ""
         return String(format: "%@%.0fW", sign, watts)
-    }
-
-    /// Watts label with power emoji: `⚡ +42W`.
-    var menuBarWattsLabel: String {
-        "⚡ \(menuBarWattsText)"
-    }
-
-    /// Both-style text before the battery glyph: `⚡ +42W · 75%`.
-    var menuBarBothText: String {
-        "\(menuBarWattsLabel) · \(battery.percentage)%"
     }
 
     // MARK: - Display helpers
@@ -152,11 +134,6 @@ final class BatteryViewModel {
         return .secondary
     }
 
-    func displayOptionalString(_ value: String?) -> String {
-        guard let value, !value.isEmpty else { return "Unavailable" }
-        return value
-    }
-
     /// Time-to-full / time-to-empty, or a short calculating message when IOKit has no estimate.
     func displayTimeRemaining() -> String {
         if let value = battery.timeRemaining, !value.isEmpty {
@@ -168,24 +145,6 @@ final class BatteryViewModel {
     /// Clears history and forces a fresh IOKit read into the UI.
     func refreshNow() {
         batteryService.forceRefresh()
-    }
-
-    /// Wear as percent lost from design (from health, or max/design).
-    var wearPercent: Double? {
-        if let health = battery.health {
-            return Swift.max(0, 100.0 - health)
-        }
-        guard let maxCapacity = battery.maxCapacity,
-              let design = battery.designCapacity,
-              design > 0 else {
-            return nil
-        }
-        return Swift.max(0, (1.0 - Double(maxCapacity) / Double(design)) * 100.0)
-    }
-
-    func displayWear(_ value: Double?) -> String {
-        guard let value else { return "Unavailable" }
-        return String(format: "%.0f%%", value)
     }
 
     /// `Now current · Max max mAh` when both capacities exist.

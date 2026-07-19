@@ -30,8 +30,8 @@ Power values are **signed**: positive while charging into the pack, negative whi
 ## Features
 
 ### Menu bar
-- Six styles: Text, Battery, Battery + %, Power bolt, Bolt + Watts, Battery (auto bolt)
-- Text mode can show watts, percentage, or both
+- Three styles: Battery, Watts, Both
+- Battery appearance: Colored or Black & White
 - Menu-bar-only app — no Dock icon
 
 ### Popover look
@@ -96,7 +96,7 @@ xcodebuild -project VoltPeek.xcodeproj -scheme VoltPeek -destination 'platform=m
 
 Stack: Swift · SwiftUI · AppKit (menu bar) · IOKit · MVVM · no third-party dependencies.
 
-Architecture notes: [doc.md](doc.md) · Release checklist: [docs/RELEASE.md](docs/RELEASE.md) · Support: [docs/SUPPORT.md](docs/SUPPORT.md)
+Release checklist: [docs/RELEASE.md](docs/RELEASE.md) · Support: [docs/SUPPORT.md](docs/SUPPORT.md)
 
 ---
 

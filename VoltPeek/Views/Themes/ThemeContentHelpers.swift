@@ -29,11 +29,6 @@ enum ThemeContentHelpers {
         return manufacturer
     }
 
-    static func capacityText(_ value: Int?) -> String {
-        guard let value else { return "Unavailable" }
-        return "\(value) mAh"
-    }
-
     /// Quiet one-liner: health % · cycles · current/max when available.
     @MainActor
     static func passiveHealthSummary(viewModel: BatteryViewModel) -> String {

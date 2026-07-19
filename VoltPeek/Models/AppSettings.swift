@@ -77,14 +77,6 @@ enum FontSizePreference: String, CaseIterable, Identifiable, Sendable {
 
     var id: String { rawValue }
 
-    var title: String {
-        switch self {
-        case .small: return "Small"
-        case .medium: return "Medium"
-        case .large: return "Large"
-        }
-    }
-
     var multiplier: CGFloat {
         switch self {
         case .small: return 0.90
@@ -102,15 +94,6 @@ enum UIScalePreference: String, CaseIterable, Identifiable, Sendable {
     case xlarge130
 
     var id: String { rawValue }
-
-    var title: String {
-        switch self {
-        case .compact85: return "85%"
-        case .standard: return "100%"
-        case .large115: return "115%"
-        case .xlarge130: return "130%"
-        }
-    }
 
     var multiplier: CGFloat {
         switch self {
@@ -209,8 +192,6 @@ enum MenuBarBatteryAppearance: String, CaseIterable, Identifiable, Sendable {
 /// User-configurable preferences persisted via UserDefaults.
 struct AppSettings: Equatable, Sendable {
     var refreshIntervalSeconds: Double
-    var showWattsInMenuBar: Bool
-    var showPercentageInMenuBar: Bool
     var launchAtLogin: Bool
     var popoverTheme: PopoverTheme
     var fontSize: FontSizePreference
@@ -221,8 +202,6 @@ struct AppSettings: Equatable, Sendable {
 
     static let `default` = AppSettings(
         refreshIntervalSeconds: 3,
-        showWattsInMenuBar: true,
-        showPercentageInMenuBar: true,
         launchAtLogin: false,
         popoverTheme: .compact,
         fontSize: .medium,

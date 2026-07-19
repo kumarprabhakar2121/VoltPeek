@@ -118,19 +118,6 @@ struct SignedPowerBadge: View {
     }
 }
 
-/// Temperature with cool/warm/hot coloring.
-struct TempBadge: View {
-    let viewModel: BatteryViewModel
-    @Environment(\.themeTypography) private var type
-
-    var body: some View {
-        Text(viewModel.displayTemperature(viewModel.battery.temperatureCelsius))
-            .font(type.metric)
-            .monospacedDigit()
-            .foregroundStyle(viewModel.temperatureColor(viewModel.battery.temperatureCelsius))
-    }
-}
-
 /// Compact horizontal metric used in Material redesign.
 struct InlineMetric: View {
     @Environment(\.themeTypography) private var type
@@ -139,20 +126,12 @@ struct InlineMetric: View {
     let title: String
     let value: String
     var valueColor: Color = .primary
-    var systemImage: String? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2 * scale) {
-            HStack(spacing: 3) {
-                if let systemImage {
-                    Image(systemName: systemImage)
-                        .font(type.caption2)
-                        .foregroundStyle(.secondary)
-                }
-                Text(title)
-                    .font(type.caption2)
-                    .foregroundStyle(.secondary)
-            }
+            Text(title)
+                .font(type.caption2)
+                .foregroundStyle(.secondary)
             Text(value)
                 .font(type.metricEmphasized)
                 .monospacedDigit()
@@ -200,36 +179,5 @@ struct GlassChip: View {
             }
             .overlay(shape.strokeBorder(.primary.opacity(a11y.borderOpacity), lineWidth: 0.6))
         }
-    }
-}
-
-/// Colored AccuBattery-style label/value row.
-struct SignedMetricRow: View {
-    @Environment(\.themeTypography) private var type
-    @Environment(\.themeAccessibility) private var a11y
-
-    let label: String
-    let value: String
-    var valueColor: Color = .primary
-    var systemImage: String? = nil
-
-    var body: some View {
-        HStack {
-            HStack(spacing: 4) {
-                if a11y.differentiateWithoutColor, let systemImage {
-                    Image(systemName: systemImage)
-                        .foregroundStyle(.secondary)
-                }
-                Text(label)
-                    .foregroundStyle(.secondary.opacity(a11y.secondaryOpacity))
-            }
-            Spacer()
-            Text(value)
-                .font(type.metric)
-                .monospacedDigit()
-                .foregroundStyle(valueColor)
-                .multilineTextAlignment(.trailing)
-        }
-        .font(type.body)
     }
 }

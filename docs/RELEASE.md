@@ -38,5 +38,5 @@ Mention: menu bar–only (`LSUIElement`), local IOKit battery reads, no networki
 
 ## After approval
 
-- Tag git release `v1.0.0`
+- Tag git release (e.g. `v1.1.0`)
 - Optionally publish notarized DMG for Homebrew (see [HOMEBREW.md](HOMEBREW.md))

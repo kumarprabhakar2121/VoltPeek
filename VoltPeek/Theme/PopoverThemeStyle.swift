@@ -3,22 +3,13 @@ import SwiftUI
 /// Shared colors and surface helpers for popover themes.
 enum PopoverThemeStyle {
     static let materialAccent = Color(red: 0.043, green: 0.561, blue: 0.416)
-    static let wattsAccent = Color.orange
     static let chargingAccent = Color.green
     static let dischargingAccent = Color.secondary
-    static let coolTemp = Color(red: 0.20, green: 0.70, blue: 0.85)
 
     static func statusColor(isCharging: Bool, isOnACPower: Bool) -> Color {
         if isCharging { return chargingAccent }
         if isOnACPower { return materialAccent }
         return dischargingAccent
-    }
-
-    static func healthColor(_ health: Double?) -> Color {
-        guard let health else { return .secondary }
-        if health >= 80 { return materialAccent }
-        if health >= 60 { return .orange }
-        return .red
     }
 }
 
@@ -50,32 +41,6 @@ struct BatteryRing: View {
         }
         .frame(width: size, height: size)
         .accessibilityLabel("Battery \(percentage) percent")
-    }
-}
-
-/// Linear health capacity bar.
-struct HealthBar: View {
-    let health: Double?
-    var height: CGFloat = 6
-
-    private var progress: Double {
-        guard let health else { return 0 }
-        return min(max(health / 100.0, 0), 1)
-    }
-
-    var body: some View {
-        GeometryReader { geo in
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(Color.secondary.opacity(0.18))
-                Capsule()
-                    .fill(PopoverThemeStyle.healthColor(health))
-                    .frame(width: geo.size.width * progress)
-                    .animation(.easeInOut(duration: 0.45), value: health)
-            }
-        }
-        .frame(height: height)
-        .accessibilityLabel("Battery health \(Int(health ?? 0)) percent")
     }
 }
 

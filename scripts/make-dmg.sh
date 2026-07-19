@@ -2,7 +2,7 @@
 # Build a Release DMG for GitHub Releases (ad-hoc signed unless you set DEVELOPER_ID).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-VERSION="${1:-1.0.0}"
+VERSION="${1:-1.1.0}"
 cd "$ROOT"
 xcodegen generate
 xcodebuild -project VoltPeek.xcodeproj -scheme VoltPeek -configuration Release \

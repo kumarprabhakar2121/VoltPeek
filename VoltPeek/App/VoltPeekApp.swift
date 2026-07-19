@@ -5,6 +5,10 @@ import AppKit
 struct VoltPeekApp: App {
     @State private var viewModel = BatteryViewModel()
 
+    init() {
+        AppDiagnostics.shared.install()
+    }
+
     var body: some Scene {
         MenuBarExtra {
             MenuView(viewModel: viewModel)
@@ -26,6 +30,10 @@ struct VoltPeekApp: App {
                 GraphSettingsView(viewModel: viewModel)
                     .tabItem {
                         Label("Power Graph", systemImage: "chart.xyaxis.line")
+                    }
+                DiagnosticsView()
+                    .tabItem {
+                        Label("Diagnostics", systemImage: "stethoscope")
                     }
                 AboutView()
                     .tabItem {

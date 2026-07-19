@@ -12,7 +12,6 @@ struct WattageSample: Equatable, Sendable {
 final class BatteryService {
     private(set) var battery: BatteryInfo = .unavailable
     private(set) var charger: ChargerInfo = .unavailable
-    private(set) var lastUpdated: Date?
     /// Samples within the last 60 seconds (oldest → newest).
     private(set) var wattageHistory: [WattageSample] = []
 
@@ -70,7 +69,6 @@ final class BatteryService {
         let snapshot = reader.read()
         battery = snapshot.battery
         charger = snapshot.charger
-        lastUpdated = Date()
         appendWattageSample(battery.watts)
         onUpdate?()
     }
