@@ -21,15 +21,8 @@ final class AppDiagnosticsTests: XCTestCase {
     }
 
     func testSupportReportIncludesHeaderAndLog() {
-        // Flush async log() via a sync supportReport on the same queue after a brief wait.
-        let deadline = Date().addingTimeInterval(1)
-        var report = ""
-        repeat {
-            report = diagnostics.supportReport()
-            if report.contains("Launch test harness") { break }
-            Thread.sleep(forTimeInterval: 0.01)
-        } while Date() < deadline
-
+        // log() enqueues before returning; supportReport() drains the same serial queue.
+        let report = diagnostics.supportReport()
         XCTAssertTrue(report.contains("VoltPeek Diagnostics"))
         XCTAssertTrue(report.contains("=== App log ==="))
         XCTAssertTrue(report.contains("Launch test harness"), report)
@@ -37,13 +30,7 @@ final class AppDiagnosticsTests: XCTestCase {
 
     func testLogAppendsToSupportReport() {
         diagnostics.log("unit-test-marker-42")
-        let deadline = Date().addingTimeInterval(1)
-        var report = ""
-        repeat {
-            report = diagnostics.supportReport()
-            if report.contains("unit-test-marker-42") { break }
-            Thread.sleep(forTimeInterval: 0.01)
-        } while Date() < deadline
+        let report = diagnostics.supportReport()
         XCTAssertTrue(report.contains("unit-test-marker-42"), report)
     }
 

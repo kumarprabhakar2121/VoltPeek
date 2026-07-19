@@ -275,26 +275,8 @@ private func voltPeekSignalHandler(_ signalNumber: Int32) {
     let fd = voltPeekCrashFileDescriptor
     if fd >= 0 {
         // Static bytes only — no heap allocation in the signal path.
-        let prefix: StaticString = "VoltPeek crash signal "
-        prefix.withUTF8Buffer { buffer in
-            _ = write(fd, buffer.baseAddress, buffer.count)
-        }
-
-        var digits = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0) // 11 stack slots
-        withUnsafeMutablePointer(to: &digits) { tuplePtr in
-            let ptr = UnsafeMutableRawPointer(tuplePtr).assumingMemoryBound(to: UInt8.self)
-            var value = UInt32(bitPattern: signalNumber)
-            var index = 11
-            repeat {
-                index -= 1
-                ptr[index] = UInt8(value % 10) + 48
-                value /= 10
-            } while value > 0
-            _ = write(fd, ptr.advanced(by: index), 11 - index)
-        }
-
-        let newline: StaticString = "\n"
-        newline.withUTF8Buffer { buffer in
+        let message: StaticString = "VoltPeek crash (fatal signal; see macOS DiagnosticReports)\n"
+        message.withUTF8Buffer { buffer in
             _ = write(fd, buffer.baseAddress, buffer.count)
         }
         fsync(fd)
