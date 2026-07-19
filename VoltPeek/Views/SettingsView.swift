@@ -38,6 +38,19 @@ struct SettingsView: View {
                 Text("To visually replace macOS Battery, turn it off in System Settings → Control Center → Battery → Show in Menu Bar.")
             }
 
+            if settingsManager.menuBarStyle != .watts {
+                Section {
+                    Picker("Battery Icon", selection: $settingsManager.menuBarBatteryAppearance) {
+                        ForEach(MenuBarBatteryAppearance.allCases) { appearance in
+                            Text(appearance.title).tag(appearance)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                } footer: {
+                    Text("Colored uses red / orange / yellow / green by charge level. Black & White matches the menu bar tint.")
+                }
+            }
+
             Section {
                 LazyVGrid(columns: selectionColumns, spacing: 10) {
                     ForEach(PopoverTheme.allCases) { theme in
@@ -166,25 +179,39 @@ struct SettingsView: View {
     @ViewBuilder
     private func menuBarPreview(for style: MenuBarStyle) -> some View {
         let a11y = settingsManager.accessibility
+        let appearance = settingsManager.menuBarBatteryAppearance
+
         switch style {
         case .battery:
             HStack(spacing: 3) {
                 Text("75%")
                     .font(.caption.monospacedDigit())
                     .fontWeight(a11y.boldText ? .bold : .regular)
-                SystemMenuBarBatteryIcon(percentage: 75, accessibility: a11y, height: 11)
+                SystemMenuBarBatteryIcon(
+                    percentage: 75,
+                    accessibility: a11y,
+                    appearance: appearance,
+                    height: 11
+                )
             }
         case .watts:
-            Text("⚡ +42W")
-                .font(.caption.monospacedDigit())
-                .fontWeight(a11y.boldText ? .bold : .regular)
+            Image(nsImage: SystemMenuBarBatteryIcon.makeWattsLabelImage(
+                wattsText: "+42W",
+                accessibility: a11y,
+                appearance: appearance,
+                height: 11
+            ))
+            .renderingMode(.original)
         case .both:
-            HStack(spacing: 3) {
-                Text("⚡ +42W · 75%")
-                    .font(.caption.monospacedDigit())
-                    .fontWeight(a11y.boldText ? .bold : .regular)
-                SystemMenuBarBatteryIcon(percentage: 75, isCharging: true, accessibility: a11y, height: 11)
-            }
+            Image(nsImage: SystemMenuBarBatteryIcon.makeBothLabelImage(
+                wattsText: "+42W",
+                percentage: 75,
+                isCharging: true,
+                accessibility: a11y,
+                appearance: appearance,
+                height: 11
+            ))
+            .renderingMode(.original)
         }
     }
 }

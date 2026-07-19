@@ -18,6 +18,7 @@ final class SettingsManager {
         static let reduceTransparency = "a11yReduceTransparency"
         static let differentiateWithoutColor = "a11yDifferentiateWithoutColor"
         static let menuBarStyle = "menuBarStyle"
+        static let menuBarBatteryAppearance = "menuBarBatteryAppearance"
     }
 
     private let defaults: UserDefaults
@@ -82,6 +83,10 @@ final class SettingsManager {
         didSet { defaults.set(menuBarStyle.rawValue, forKey: Keys.menuBarStyle) }
     }
 
+    var menuBarBatteryAppearance: MenuBarBatteryAppearance {
+        didSet { defaults.set(menuBarBatteryAppearance.rawValue, forKey: Keys.menuBarBatteryAppearance) }
+    }
+
     /// Curated size control; writes through to fontSize + uiScale.
     var displaySize: DisplaySizePreference {
         get { DisplaySizePreference.matching(fontSize: fontSize, uiScale: uiScale) }
@@ -110,7 +115,8 @@ final class SettingsManager {
             fontSize: fontSize,
             uiScale: uiScale,
             accessibility: accessibility,
-            menuBarStyle: menuBarStyle
+            menuBarStyle: menuBarStyle,
+            menuBarBatteryAppearance: menuBarBatteryAppearance
         )
     }
 
@@ -177,6 +183,13 @@ final class SettingsManager {
         self.menuBarStyle = migratedStyle
         defaults.set(migratedStyle.rawValue, forKey: Keys.menuBarStyle)
 
+        if let raw = defaults.string(forKey: Keys.menuBarBatteryAppearance),
+           let appearance = MenuBarBatteryAppearance(rawValue: raw) {
+            self.menuBarBatteryAppearance = appearance
+        } else {
+            self.menuBarBatteryAppearance = AppSettings.default.menuBarBatteryAppearance
+        }
+
         let serviceEnabled = SMAppService.mainApp.status == .enabled
         self.isSyncingLaunchAtLogin = true
         self.launchAtLogin = serviceEnabled
@@ -216,6 +229,7 @@ final class SettingsManager {
         reduceTransparency = defaultsSettings.accessibility.reduceTransparency
         differentiateWithoutColor = defaultsSettings.accessibility.differentiateWithoutColor
         menuBarStyle = defaultsSettings.menuBarStyle
+        menuBarBatteryAppearance = defaultsSettings.menuBarBatteryAppearance
 
         // Launch at Login last so SMAppService matches the default (off).
         if launchAtLogin != defaultsSettings.launchAtLogin {

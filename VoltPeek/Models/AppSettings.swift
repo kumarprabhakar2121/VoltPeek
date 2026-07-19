@@ -191,6 +191,21 @@ struct AccessibilityPreferences: Equatable, Sendable {
     }
 }
 
+/// How the menu bar battery glyph is colored.
+enum MenuBarBatteryAppearance: String, CaseIterable, Identifiable, Sendable {
+    case colored
+    case monochrome
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .colored: return "Colored"
+        case .monochrome: return "Black & White"
+        }
+    }
+}
+
 /// User-configurable preferences persisted via UserDefaults.
 struct AppSettings: Equatable, Sendable {
     var refreshIntervalSeconds: Double
@@ -202,6 +217,7 @@ struct AppSettings: Equatable, Sendable {
     var uiScale: UIScalePreference
     var accessibility: AccessibilityPreferences
     var menuBarStyle: MenuBarStyle
+    var menuBarBatteryAppearance: MenuBarBatteryAppearance
 
     static let `default` = AppSettings(
         refreshIntervalSeconds: 3,
@@ -212,7 +228,8 @@ struct AppSettings: Equatable, Sendable {
         fontSize: .medium,
         uiScale: .standard,
         accessibility: .default,
-        menuBarStyle: .battery
+        menuBarStyle: .battery,
+        menuBarBatteryAppearance: .colored
     )
 
     /// Allowed discrete refresh intervals shown in Settings.

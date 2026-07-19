@@ -10,7 +10,7 @@ struct VoltPeekApp: App {
             MenuView(viewModel: viewModel)
         } label: {
             MenuBarLabelView(viewModel: viewModel)
-                .id("\(viewModel.menuBarEpoch)|\(viewModel.settingsManager.accessibility.fingerprint)|\(viewModel.settingsManager.menuBarStyle.rawValue)")
+                .id("\(viewModel.menuBarEpoch)|\(viewModel.settingsManager.accessibility.fingerprint)|\(viewModel.settingsManager.menuBarStyle.rawValue)|\(viewModel.settingsManager.menuBarBatteryAppearance.rawValue)")
                 .task {
                     viewModel.start()
                 }
@@ -45,10 +45,15 @@ private struct MenuBarLabelView: View {
         viewModel.settingsManager.accessibility
     }
 
+    private var batteryAppearance: MenuBarBatteryAppearance {
+        viewModel.settingsManager.menuBarBatteryAppearance
+    }
+
     var body: some View {
         let style = viewModel.settingsManager.menuBarStyle
         let pct = viewModel.battery.percentage
         let charging = viewModel.battery.isCharging
+        let watts = viewModel.menuBarWattsText
 
         Group {
             switch style {
@@ -60,24 +65,31 @@ private struct MenuBarLabelView: View {
                     SystemMenuBarBatteryIcon(
                         percentage: pct,
                         isCharging: charging,
-                        accessibility: a11y
+                        accessibility: a11y,
+                        appearance: batteryAppearance
                     )
                 }
             case .watts:
-                Text(viewModel.menuBarWattsLabel)
-                    .monospacedDigit()
-                    .fontWeight(a11y.boldText ? .bold : .regular)
+                // Single composite — MenuBarExtra truncates multi-view HStacks.
+                Image(nsImage: SystemMenuBarBatteryIcon.makeWattsLabelImage(
+                    wattsText: watts,
+                    accessibility: a11y,
+                    appearance: batteryAppearance
+                ))
+                .renderingMode(.original)
             case .both:
-                // One template image — MenuBarExtra drops trailing views in wide HStacks.
+                // Single composite: bolt · watts · · · percent · battery.
                 Image(nsImage: SystemMenuBarBatteryIcon.makeBothLabelImage(
-                    bothText: viewModel.menuBarBothText,
+                    wattsText: watts,
                     percentage: pct,
                     isCharging: charging,
-                    accessibility: a11y
+                    accessibility: a11y,
+                    appearance: batteryAppearance
                 ))
-                .renderingMode(.template)
+                .renderingMode(.original)
             }
         }
+        .environment(\.layoutDirection, .leftToRight)
         .fixedSize()
         .accessibilityLabel(Text(accessibilityLabel))
     }

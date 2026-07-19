@@ -49,6 +49,13 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertEqual(AppSettings.default.menuBarStyle, .battery)
     }
 
+    func testMenuBarBatteryAppearanceOptions() {
+        XCTAssertEqual(MenuBarBatteryAppearance.allCases.map(\.rawValue), ["colored", "monochrome"])
+        XCTAssertEqual(MenuBarBatteryAppearance.colored.title, "Colored")
+        XCTAssertEqual(MenuBarBatteryAppearance.monochrome.title, "Black & White")
+        XCTAssertEqual(AppSettings.default.menuBarBatteryAppearance, .colored)
+    }
+
     func testMenuBarStyleMigrationFromLegacyRawValues() {
         XCTAssertEqual(MenuBarStyle.migrating(fromRaw: nil), .battery)
         XCTAssertEqual(MenuBarStyle.migrating(fromRaw: "battery"), .battery)
