@@ -34,7 +34,11 @@ VoltPeek is free for users ($0). You still need an **Apple Developer Program** m
 
 ## Review notes tip
 
-Mention: menu bar–only (`LSUIElement`), local IOKit battery reads, no networking/telemetry, support `hello@voltpeek.app`.
+Mention: menu bar–only (`LSUIElement`); local IOKit battery reads only; fully offline (no networking/telemetry); optional on-device Diagnostics the user can email; support `hello@voltpeek.app`.
+
+## Current project versions
+
+Check `project.yml`: `MARKETING_VERSION` (e.g. `1.1.0`) and `CURRENT_PROJECT_VERSION` (build number) before archiving.
 
 ## After approval
 

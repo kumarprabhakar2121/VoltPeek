@@ -79,22 +79,27 @@
   <main>
     <p class="brand">VoltPeek</p>
     <h1>Support</h1>
-    <p class="meta">Native macOS menu bar battery telemetry</p>
+    <p class="meta">Native macOS menu bar battery telemetry · Fully offline</p>
 
     <div class="card">
       <p style="margin:0"><strong>Email:</strong> <a href="mailto:hello@voltpeek.app">hello@voltpeek.app</a></p>
     </div>
 
+    <h2>Safe to use</h2>
+    <p>VoltPeek does not need internet access and does not upload your data. It only reads local battery and power info. Open source under MIT.</p>
+    <p>If macOS shows <em>“VoltPeek.app” Not Opened</em>, that is a signing/notarization warning — not a malware finding. Click <strong>Done</strong> (not Move to Trash), then allow the app in <strong>System Settings → Privacy &amp; Security → Open Anyway</strong>, or right-click the app → <strong>Open</strong>.</p>
+
     <h2>Known limitations</h2>
     <ul>
       <li>Desktop Macs without a battery show limited or unavailable fields.</li>
-      <li>Adapter name/wattage depends on what IOKit exposes for your charger.</li>
+      <li>Adapter name, wattage, voltage, and current depend on what IOKit exposes for your charger.</li>
       <li>Very short refresh intervals (e.g. 0.5 s) use more CPU; prefer 2–3 s for everyday use.</li>
-      <li>Menu bar emoji/text styles may look different in light vs dark menu bar appearances.</li>
+      <li>Menu bar Battery / Watts / Both icons follow the system menu bar appearance (light or dark).</li>
+      <li>GitHub / Homebrew builds are not Apple-notarized yet; first launch may need Open Anyway.</li>
     </ul>
 
     <h2>Bug reports</h2>
-    <p>Include: macOS version, Mac model (Apple Silicon / Intel), VoltPeek version (About tab), steps to reproduce, and a screenshot if relevant.</p>
+    <p>Include: macOS version, Mac model (Apple Silicon / Intel), VoltPeek version (<strong>Settings → About</strong>), steps to reproduce, a screenshot if relevant, and optionally a Diagnostics report (<strong>Settings → Diagnostics → Copy Report</strong>).</p>
 
     <footer>
       <nav>

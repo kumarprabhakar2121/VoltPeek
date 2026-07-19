@@ -1,12 +1,28 @@
 # Homebrew — VoltPeek
 
+Current cask version: **1.1.0** (personal tap).
+
 ## Install (works today)
 
 ```bash
 brew install --cask kumarprabhakar2121/tap/voltpeek
 ```
 
+Upgrade:
+
+```bash
+brew upgrade --cask voltpeek
+```
+
+If Homebrew says the app is missing from `/Applications` (for example after Gatekeeper **Move to Trash**):
+
+```bash
+brew reinstall --cask kumarprabhakar2121/tap/voltpeek
+```
+
 Tap: https://github.com/kumarprabhakar2121/homebrew-tap
+
+First launch may show a Gatekeeper warning (ad-hoc signed, not notarized). Steps: [README — First launch](../README.md#first-launch-macos-blocks-the-app).
 
 ## Why not plain `brew install --cask voltpeek` yet?
 
@@ -41,7 +57,8 @@ brew uninstall --cask voltpeek
 
 ## Maintainers — bump a version
 
-1. `./scripts/make-dmg.sh 1.0.1` (prefer notarized once available)
-2. Upload `VoltPeek-1.0.1.dmg` to GitHub Release `v1.0.1`
-3. Update [homebrew-tap `Casks/voltpeek.rb`](https://github.com/kumarprabhakar2121/homebrew-tap/blob/main/Casks/voltpeek.rb) `version` + `sha256`
-4. Push the tap
+1. Bump `MARKETING_VERSION` / `CURRENT_PROJECT_VERSION` in `project.yml`, run `xcodegen generate`.
+2. `./scripts/make-dmg.sh X.Y.Z` (match the new marketing version; prefer notarized once available).
+3. Upload `VoltPeek-X.Y.Z.dmg` to GitHub Release `vX.Y.Z`.
+4. Update [homebrew-tap `Casks/voltpeek.rb`](https://github.com/kumarprabhakar2121/homebrew-tap/blob/main/Casks/voltpeek.rb) `version` + `sha256`.
+5. Push the tap.

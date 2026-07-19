@@ -22,8 +22,8 @@ Click the menu bar item for a compact popover with:
 | --- | --- |
 | **Status** | Battery %, charging / on AC, time remaining |
 | **Power** | Signed watts (W), current (A), voltage (V), temperature (°C) |
-| **Health** | Cycle count, max capacity, design capacity, health % |
-| **Adapter** | Connected state, adapter wattage, adapter name (when IOKit exposes them) |
+| **Health** | Health %, cycle count, current and max capacity (mAh) |
+| **Adapter** | Connected state, name, wattage, and voltage/current/manufacturer when IOKit exposes them |
 
 Power values are **signed**: positive while charging into the pack, negative while discharging. That makes slow chargers, USB-C PD quirks, and discharge under load obvious at a glance.
 
@@ -39,7 +39,7 @@ Power values are **signed**: positive while charging into the pack, negative whi
 ### Popover look
 - Themes: **List** (dense), **Cards** (grouped), **Glass** (frosted)
 - Display Size: Compact → Extra Large (type and spacing scale together)
-- Light and Dark Mode
+- Follows system Light / Dark appearance (no separate theme toggle)
 
 ### Live updates
 - Configurable refresh: 0.5–10 seconds (default 3 s)
@@ -48,6 +48,7 @@ Power values are **signed**: positive while charging into the pack, negative whi
 ### Preferences
 - Launch at Login
 - Accessibility overrides: contrast, bold text, reduce transparency, differentiate without color
+- Local Diagnostics (on-device logs; copy / email / clear — nothing is uploaded automatically)
 - Reset All Settings
 
 ---
@@ -126,9 +127,10 @@ VoltPeek is designed to be trustworthy and private by default:
 | --- | --- |
 | **Offline** | No network calls. Works with Wi‑Fi and Ethernet off. |
 | **No accounts** | Nothing to sign in to. |
-| **No tracking** | No analytics, ads, telemetry, or crash uploaders. |
+| **No tracking** | No analytics, ads, telemetry, or automatic crash upload. |
 | **No personal data** | Does not read your files, photos, contacts, messages, or keychain. |
 | **Local only** | Battery/power info via IOKit / IOPowerSources on your Mac. |
+| **Diagnostics** | Optional on-device logs; you choose whether to copy or email them. |
 | **Open source** | MIT — review the code yourself. |
 
 - Policy: [docs/PRIVACY.md](docs/PRIVACY.md)
