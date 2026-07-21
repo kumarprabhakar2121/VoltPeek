@@ -30,6 +30,9 @@ final class BatteryViewModel {
     }
 
     func start() {
+        AppDiagnostics.shared.log(
+            "Battery monitoring started (refresh every \(settingsManager.refreshIntervalSeconds)s)"
+        )
         batteryService.startPolling(intervalSeconds: settingsManager.refreshIntervalSeconds)
         intervalObservationTask?.cancel()
         intervalObservationTask = Task { [weak self] in
@@ -40,6 +43,7 @@ final class BatteryViewModel {
                 let current = self.settingsManager.refreshIntervalSeconds
                 if current != lastInterval {
                     lastInterval = current
+                    AppDiagnostics.shared.log("Refresh interval changed to \(current)s")
                     self.batteryService.startPolling(intervalSeconds: current)
                 }
             }
@@ -156,6 +160,7 @@ final class BatteryViewModel {
 
     /// Clears history and forces a fresh IOKit read into the UI.
     func refreshNow() {
+        AppDiagnostics.shared.log("Manual battery refresh requested")
         batteryService.forceRefresh()
     }
 

@@ -43,6 +43,11 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertEqual(AppSettings.default.appScalePercent, 100)
     }
 
+    func testAppScaleClampingHandlesExtremeStoredValues() {
+        XCTAssertEqual(AppSettings.clampedAppScale(Int.min), 100)
+        XCTAssertEqual(AppSettings.clampedAppScale(Int.max), 300)
+    }
+
     func testPopoverThemeTitles() {
         XCTAssertEqual(PopoverTheme.compact.title, "List")
         XCTAssertEqual(PopoverTheme.material.title, "Cards")

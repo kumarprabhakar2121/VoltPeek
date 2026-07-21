@@ -1,6 +1,6 @@
 import Foundation
 
-/// A single wattage sample for the rolling 1-minute graph.
+/// A single wattage sample for the rolling 10-minute graph.
 struct WattageSample: Equatable, Sendable {
     let date: Date
     let watts: Double
@@ -12,7 +12,7 @@ struct WattageSample: Equatable, Sendable {
 final class BatteryService {
     private(set) var battery: BatteryInfo = .unavailable
     private(set) var charger: ChargerInfo = .unavailable
-    /// Samples within the last 60 seconds (oldest → newest).
+    /// Samples within the last 10 minutes (oldest → newest).
     private(set) var wattageHistory: [WattageSample] = []
 
     /// Invoked on the main actor after each successful refresh.
@@ -21,7 +21,7 @@ final class BatteryService {
     private let reader: PowerSourceReader
     private var pollingTask: Task<Void, Never>?
     private var isReading = false
-    private let historyWindow: TimeInterval = 60
+    private let historyWindow: TimeInterval = 10 * 60
 
     init(reader: PowerSourceReader = PowerSourceReader()) {
         self.reader = reader
@@ -50,21 +50,17 @@ final class BatteryService {
     /// Performs a single coalesced read from the system.
     func refresh() {
         guard !isReading else { return }
-        performRead(clearHistory: false)
+        performRead()
     }
 
-    /// Clears wattage history and always re-reads IOKit (manual Refresh).
+    /// Always re-reads IOKit and appends a fresh sample (manual Refresh).
     func forceRefresh() {
-        performRead(clearHistory: true)
+        performRead()
     }
 
-    private func performRead(clearHistory: Bool) {
+    private func performRead() {
         isReading = true
         defer { isReading = false }
-
-        if clearHistory {
-            wattageHistory.removeAll()
-        }
 
         let snapshot = reader.read()
         battery = snapshot.battery

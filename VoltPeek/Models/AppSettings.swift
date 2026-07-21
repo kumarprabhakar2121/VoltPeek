@@ -227,6 +227,15 @@ struct AppSettings: Equatable, Sendable {
     }
 
     static func clampedAppScale(_ value: Int) -> Int {
-        appScaleOptions.min(by: { abs($0 - value) < abs($1 - value) }) ?? 100
+        guard
+            let minimum = appScaleOptions.first,
+            let maximum = appScaleOptions.last
+        else {
+            return 100
+        }
+        if value <= minimum { return minimum }
+        if value >= maximum { return maximum }
+        return appScaleOptions.min(by: { ($0 - value).magnitude < ($1 - value).magnitude })
+            ?? minimum
     }
 }

@@ -15,6 +15,7 @@ extension EnvironmentValues {
 struct AppShellView: View {
     @Bindable var viewModel: BatteryViewModel
     @State private var selection: AppSection = .dashboard
+    @State private var hoveredSection: AppSection?
 
     private var appScale: CGFloat {
         CGFloat(viewModel.settingsManager.appScalePercent) / 100
@@ -30,7 +31,8 @@ struct AppShellView: View {
                 .frame(width: geometry.size.width, height: geometry.size.height)
                 .environment(\.appScale, appScale)
         }
-        .frame(minWidth: 780, idealWidth: 860, minHeight: 620, idealHeight: 680)
+        .frame(minWidth: 700, idealWidth: 820, minHeight: 520, idealHeight: 600)
+        .background(InitialWindowConfigurator())
     }
 
     private var appContent: some View {
@@ -52,25 +54,32 @@ struct AppShellView: View {
                             ))
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal, 10 * chromeScale)
-                            .padding(.vertical, 8 * chromeScale)
+                            .padding(.vertical, 10 * chromeScale)
                             .background(
                                 RoundedRectangle(cornerRadius: 7 * chromeScale, style: .continuous)
                                     .fill(
                                         selection == section
-                                            ? Color.accentColor.opacity(0.18)
-                                            : Color.clear
+                                            ? Color.accentColor.opacity(0.26)
+                                            : hoveredSection == section
+                                                ? AppPalette.raisedSurface
+                                                : Color.clear
                                     )
                             )
+                            .contentShape(Rectangle())
                     }
-                    .buttonStyle(.plain)
-                    .contentShape(Rectangle())
+                    .buttonStyle(SidebarButtonStyle())
+                    .frame(maxWidth: .infinity)
+                    .onHover { isHovered in
+                        hoveredSection = isHovered ? section : nil
+                    }
+                    .animation(.easeOut(duration: 0.12), value: hoveredSection)
                 }
 
                 Spacer(minLength: 0)
             }
-            .padding(14 * chromeScale)
-            .frame(width: 200 * chromeScale)
-            .background(.ultraThinMaterial)
+            .padding(12 * chromeScale)
+            .frame(width: 180 * chromeScale)
+            .background(AppPalette.sidebar)
 
             Divider()
 
@@ -79,39 +88,41 @@ struct AppShellView: View {
                     Text(selection.title)
                         .font(.system(size: 13 * chromeScale, weight: .semibold))
                     Spacer()
-                    if chromeScale == 1 {
-                        Text("App Scale")
-                            .font(.system(size: 13 * chromeScale))
-                            .foregroundStyle(.secondary)
-                    }
-
-                    Button {
-                        viewModel.settingsManager.appScalePercent -= 25
-                    } label: {
-                        Image(systemName: "minus")
-                            .font(.system(size: 11 * chromeScale, weight: .semibold))
-                    }
-                    .buttonStyle(.bordered)
-                    .controlSize(chromeScale == 1 ? .small : .large)
-                    .disabled(viewModel.settingsManager.appScalePercent <= 100)
-                    .accessibilityLabel("Decrease app scale")
-
-                    Text("\(viewModel.settingsManager.appScalePercent)%")
-                        .font(.system(size: 13 * chromeScale).monospacedDigit())
-                        .frame(minWidth: 48 * chromeScale)
-
-                    Button {
-                        viewModel.settingsManager.appScalePercent += 25
-                    } label: {
-                        Image(systemName: "plus")
-                            .font(.system(size: 11 * chromeScale, weight: .semibold))
-                    }
-                    .buttonStyle(.bordered)
-                    .controlSize(chromeScale == 1 ? .small : .large)
-                    .disabled(viewModel.settingsManager.appScalePercent >= 300)
-                    .accessibilityLabel("Increase app scale")
-
                     if selection == .dashboard {
+                        if chromeScale == 1 {
+                            Text("Zoom")
+                                .font(.system(size: 13 * chromeScale))
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Button {
+                            viewModel.settingsManager.appScalePercent -= 25
+                        } label: {
+                            Image(systemName: "minus")
+                                .font(.system(size: 11 * chromeScale, weight: .semibold))
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(chromeScale == 1 ? .small : .large)
+                        .disabled(viewModel.settingsManager.appScalePercent <= 100)
+                        .accessibilityLabel("Zoom out")
+                        .help("Zoom out (⌘−)")
+
+                        Text("\(viewModel.settingsManager.appScalePercent)%")
+                            .font(.system(size: 13 * chromeScale).monospacedDigit())
+                            .frame(minWidth: 48 * chromeScale)
+
+                        Button {
+                            viewModel.settingsManager.appScalePercent += 25
+                        } label: {
+                            Image(systemName: "plus")
+                                .font(.system(size: 11 * chromeScale, weight: .semibold))
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(chromeScale == 1 ? .small : .large)
+                        .disabled(viewModel.settingsManager.appScalePercent >= 300)
+                        .accessibilityLabel("Zoom in")
+                        .help("Zoom in (⌘+)")
+
                         Divider()
                             .frame(height: 20 * chromeScale)
                         Button {
@@ -132,6 +143,7 @@ struct AppShellView: View {
                 }
                 .padding(.horizontal, 20 * chromeScale)
                 .frame(height: 52 * chromeScale)
+                .background(AppPalette.toolbar)
 
                 Divider()
 
@@ -139,7 +151,9 @@ struct AppShellView: View {
                     .id(selection)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(AppPalette.canvas)
         }
+        .background(AppPalette.canvas)
     }
 
     @ViewBuilder
@@ -156,6 +170,15 @@ struct AppShellView: View {
         case .about:
             AboutView()
         }
+    }
+}
+
+private struct SidebarButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(configuration.isPressed ? 0.78 : 1)
+            .scaleEffect(configuration.isPressed ? 0.985 : 1)
+            .animation(.easeOut(duration: 0.08), value: configuration.isPressed)
     }
 }
 

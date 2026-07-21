@@ -30,7 +30,16 @@ struct AboutView: View {
                     .font(.system(size: 13 * scale))
             }
             .font(.system(size: 13 * scale))
+            .padding(24 * scale)
             .frame(maxWidth: 1080 * scale, alignment: .topLeading)
+            .background(
+                AppPalette.surface,
+                in: RoundedRectangle(cornerRadius: 16 * scale, style: .continuous)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 16 * scale, style: .continuous)
+                    .strokeBorder(AppPalette.border)
+            )
             .padding(22 * scale)
             .frame(maxWidth: .infinity, alignment: .top)
         }

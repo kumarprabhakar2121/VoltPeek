@@ -73,11 +73,12 @@ struct DashboardView: View {
         }
         .background(
             LinearGradient(
-                colors: [accent.opacity(0.055), Color.clear],
+                colors: [accent.opacity(0.10), Color.clear],
                 startPoint: .topLeading,
                 endPoint: .center
             )
         )
+        .background(AppPalette.canvas)
         .themeEnvironment(
             theme: .material,
             fontSize: .medium,
@@ -311,7 +312,7 @@ private struct DashboardSurface<Content: View>: View {
                 shape
                     .fill(
                         LinearGradient(
-                            colors: [accent.opacity(0.14), Color(nsColor: .controlBackgroundColor)],
+                            colors: [accent.opacity(0.18), AppPalette.surface],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
@@ -319,13 +320,13 @@ private struct DashboardSurface<Content: View>: View {
                     .shadow(color: .black.opacity(0.08), radius: 6 * scale, y: 2 * scale)
             } else {
                 shape
-                    .fill(Color(nsColor: .controlBackgroundColor))
+                    .fill(AppPalette.surface)
                     .shadow(color: .black.opacity(0.08), radius: 6 * scale, y: 2 * scale)
             }
         }
         .overlay(
             RoundedRectangle(cornerRadius: 18 * scale, style: .continuous)
-                .strokeBorder(Color.primary.opacity(0.08))
+                .strokeBorder(AppPalette.border)
         )
     }
 }

@@ -17,7 +17,7 @@ struct VoltPeekApp: App {
         Window("VoltPeek", id: AppWindow.main) {
             AppShellView(viewModel: viewModel)
         }
-        .defaultSize(width: 980, height: 720)
+        .defaultSize(width: 860, height: 620)
         .windowResizability(.contentMinSize)
         .commands {
             VoltPeekCommands(settingsManager: viewModel.settingsManager)
@@ -59,13 +59,13 @@ private struct VoltPeekCommands: Commands {
         }
 
         CommandGroup(after: .toolbar) {
-            Button("Increase App Scale") {
+            Button("Zoom In") {
                 settingsManager.appScalePercent += 25
             }
             .keyboardShortcut("+", modifiers: .command)
             .disabled(settingsManager.appScalePercent >= 300)
 
-            Button("Decrease App Scale") {
+            Button("Zoom Out") {
                 settingsManager.appScalePercent -= 25
             }
             .keyboardShortcut("-", modifiers: .command)

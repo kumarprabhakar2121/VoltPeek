@@ -1,7 +1,7 @@
 import AppKit
 import SwiftUI
 
-/// Settings tab: local crash/log report users can copy or email to support.
+/// Settings tab: local activity/crash report users can explicitly share.
 struct DiagnosticsView: View {
     @State private var reportText = ""
     @State private var hasCrash = false
@@ -14,7 +14,7 @@ struct DiagnosticsView: View {
             Text("Diagnostics")
                 .font(.system(size: 22 * scale, weight: .bold))
 
-            Text("Logs stay on this Mac. Nothing is uploaded. If VoltPeek crashes or misbehaves, copy the report and email it to \(AppDiagnostics.supportEmail).")
+            Text("Activity logs and crash stack traces stay on this Mac until you choose to report a problem.")
                 .font(.system(size: 13 * scale))
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -34,11 +34,30 @@ struct DiagnosticsView: View {
             }
             .frame(minHeight: 240 * scale, maxHeight: 400 * scale)
             .background(
-                .quaternary.opacity(0.35),
+                AppPalette.surface,
                 in: RoundedRectangle(cornerRadius: 8 * scale, style: .continuous)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 8 * scale, style: .continuous)
+                    .strokeBorder(AppPalette.border)
             )
 
             HStack(spacing: 10 * scale) {
+                Button {
+                    AppDiagnostics.shared.reportOnGitHub()
+                    didCopy = true
+                } label: {
+                    Label("Report on GitHub", systemImage: "ladybug")
+                }
+                .buttonStyle(.borderedProminent)
+
+                Button {
+                    AppDiagnostics.shared.emailSupportWithReport()
+                    didCopy = true
+                } label: {
+                    Label("Email Report", systemImage: "envelope")
+                }
+
                 Button {
                     AppDiagnostics.shared.copySupportReportToPasteboard()
                     didCopy = true
@@ -46,14 +65,9 @@ struct DiagnosticsView: View {
                     Label(didCopy ? "Copied" : "Copy Report", systemImage: didCopy ? "checkmark" : "doc.on.doc")
                 }
                 .keyboardShortcut("c", modifiers: [.command, .shift])
+            }
 
-                Button {
-                    AppDiagnostics.shared.emailSupportWithReport()
-                    didCopy = true
-                } label: {
-                    Label("Email Support", systemImage: "envelope")
-                }
-
+            HStack(spacing: 10 * scale) {
                 Spacer(minLength: 0)
 
                 Button("Reveal in Finder") {
@@ -69,7 +83,7 @@ struct DiagnosticsView: View {
                 .buttonStyle(.borderless)
             }
 
-            Text("Tip: Email Support copies the report first — paste it into the message body.")
+            Text("GitHub and email open with the report already filled in. The complete report is also copied as a fallback; review it before submitting because macOS crash reports can include device metadata.")
                 .font(.system(size: 11 * scale))
                 .foregroundStyle(.tertiary)
             }
@@ -78,7 +92,10 @@ struct DiagnosticsView: View {
             .frame(maxWidth: 1080 * scale, alignment: .topLeading)
             .frame(maxWidth: .infinity, alignment: .top)
         }
-        .onAppear(perform: refresh)
+        .onAppear {
+            AppDiagnostics.shared.log("Diagnostics screen opened")
+            refresh()
+        }
         .onDisappear { didCopy = false }
     }
 

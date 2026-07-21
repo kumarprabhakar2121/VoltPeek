@@ -187,7 +187,11 @@ final class SettingsManager {
             } else {
                 try SMAppService.mainApp.unregister()
             }
+            AppDiagnostics.shared.log("Launch at Login \(enabled ? "enabled" : "disabled")")
         } catch {
+            AppDiagnostics.shared.log(
+                "Launch at Login update failed: \(error.localizedDescription)"
+            )
             let actual = SMAppService.mainApp.status == .enabled
             guard launchAtLogin != actual else { return }
             isSyncingLaunchAtLogin = true

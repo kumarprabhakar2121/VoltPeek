@@ -65,6 +65,42 @@ final class PowerSourceReaderTests: XCTestCase {
         XCTAssertFalse(battery.isCharging)
     }
 
+    func testMapBatteryInfersFullChargeButRespectsExplicitFalse() {
+        let powerSource: [String: Any] = [
+            kIOPSCurrentCapacityKey: 100,
+            kIOPSIsChargingKey: false,
+            kIOPSPowerSourceStateKey: kIOPSACPowerValue
+        ]
+
+        let inferred = PowerSourceReader.mapBattery(
+            powerSource: powerSource,
+            smartBattery: ["ExternalConnected": true]
+        )
+        let explicitlyNotFull = PowerSourceReader.mapBattery(
+            powerSource: powerSource,
+            smartBattery: ["ExternalConnected": true, "FullyCharged": false]
+        )
+
+        XCTAssertTrue(inferred.isFullyCharged)
+        XCTAssertFalse(explicitlyNotFull.isFullyCharged)
+    }
+
+    func testMapBatteryUsesRawCapacityAndRejectsInvalidHealthDenominator() {
+        let battery = PowerSourceReader.mapBattery(
+            powerSource: [:],
+            smartBattery: [
+                "AppleRawCurrentCapacity": 3600,
+                "AppleRawMaxCapacity": 4500,
+                "DesignCapacity": 0
+            ]
+        )
+
+        XCTAssertEqual(battery.percentage, 80)
+        XCTAssertEqual(battery.currentCapacity, 3600)
+        XCTAssertEqual(battery.maxCapacity, 4500)
+        XCTAssertNil(battery.health)
+    }
+
     func testMapBatterySignedDischargeWatts() {
         let smartBattery: [String: Any] = [
             "Voltage": 12000,
@@ -80,6 +116,27 @@ final class PowerSourceReaderTests: XCTestCase {
         // 64000 as unsigned 16-bit ≈ -1536 mA
         let milli = PowerSourceReader.signedMilliamps(64000)
         XCTAssertEqual(milli!, -1536, accuracy: 0.1)
+    }
+
+    func testImplausibleInstantCurrentFallsBackWithChargingSign() {
+        let smartBattery: [String: Any] = [
+            "InstantAmperage": 31_000,
+            "Amperage": -1_500
+        ]
+
+        let charging = PowerSourceReader.resolveSignedCurrentAmps(
+            smartBattery: smartBattery,
+            powerSource: [:],
+            isCharging: true
+        )
+        let discharging = PowerSourceReader.resolveSignedCurrentAmps(
+            smartBattery: smartBattery,
+            powerSource: [:],
+            isCharging: false
+        )
+
+        XCTAssertEqual(charging!, 1.5, accuracy: 0.001)
+        XCTAssertEqual(discharging!, -1.5, accuracy: 0.001)
     }
 
     func testTemperatureConversion() {
@@ -129,6 +186,34 @@ final class PowerSourceReaderTests: XCTestCase {
         XCTAssertEqual(charger.adapterWatts, 38)
     }
 
+    func testMapChargerOnlyEstimatesMeaningfulConnectedPositiveWatts() {
+        let disconnected = PowerSourceReader.mapCharger(
+            powerSource: [:],
+            smartBattery: ["ExternalConnected": false],
+            batteryWatts: 40
+        )
+        let negligible = PowerSourceReader.mapCharger(
+            powerSource: [:],
+            smartBattery: ["ExternalConnected": true],
+            batteryWatts: 0.5
+        )
+        let discharging = PowerSourceReader.mapCharger(
+            powerSource: [:],
+            smartBattery: ["ExternalConnected": true],
+            batteryWatts: -20
+        )
+        let charging = PowerSourceReader.mapCharger(
+            powerSource: [:],
+            smartBattery: ["ExternalConnected": true],
+            batteryWatts: 38.6
+        )
+
+        XCTAssertNil(disconnected.adapterWatts)
+        XCTAssertNil(negligible.adapterWatts)
+        XCTAssertNil(discharging.adapterWatts)
+        XCTAssertEqual(charging.adapterWatts, 39)
+    }
+
     func testMapBatteryHandlesMissingKeysAsNil() {
         let battery = PowerSourceReader.mapBattery(powerSource: [:], smartBattery: [:])
 
@@ -175,6 +260,28 @@ final class PowerSourceReaderTests: XCTestCase {
             PowerSourceReader.formatTimeRemaining(
                 powerSource: [kIOPSTimeToEmptyKey: 0],
                 isCharging: false
+            )
+        )
+    }
+
+    func testFormatTimeRemainingUsesChargingKeyAndEnforcesUpperBound() {
+        let values: [String: Any] = [
+            kIOPSTimeToFullChargeKey: 60,
+            kIOPSTimeToEmptyKey: 42
+        ]
+
+        XCTAssertEqual(
+            PowerSourceReader.formatTimeRemaining(powerSource: values, isCharging: true),
+            "1 h 0 min"
+        )
+        XCTAssertEqual(
+            PowerSourceReader.formatTimeRemaining(powerSource: values, isCharging: false),
+            "42 min"
+        )
+        XCTAssertNil(
+            PowerSourceReader.formatTimeRemaining(
+                powerSource: [kIOPSTimeToFullChargeKey: 6000],
+                isCharging: true
             )
         )
     }
