@@ -17,6 +17,7 @@
 		626B00DA511AD7E7E75CD5D6 /* PowerSourceReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228841A11BE78873903EDF18 /* PowerSourceReader.swift */; };
 		6FB1372ABE660F9FE8A3E810 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10BD7392E90D5D5675B847 /* SettingsView.swift */; };
 		7B426900029E631DBF1A72C4 /* BatteryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC241B6C3D0AFABE5412D293 /* BatteryViewModelTests.swift */; };
+		8B142BCB6A843A3A861001CE /* AppShellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A036596FDAA051A50477300 /* AppShellView.swift */; };
 		8DFCEFA86ED205753BB3A235 /* SystemMenuBarBatteryIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C90B7B7D070DA47E54A955 /* SystemMenuBarBatteryIcon.swift */; };
 		8E9ADD65ACF54EEF8D1AA5FF /* DiagnosticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C6A7C48239FE2F0C9E99DE /* DiagnosticsView.swift */; };
 		8FB35D4F32E35501ECF1BE0D /* BatteryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16246E649BE87FA382C5511A /* BatteryViewModel.swift */; };
@@ -36,6 +37,7 @@
 		D5A7CA5355E91168A8D3EB51 /* AppDiagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B718CB287AB35BE17C2CA5 /* AppDiagnostics.swift */; };
 		DDA8BA64495D2ADD045884BD /* PowerSourceReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9060C367461BA066E8B790AA /* PowerSourceReaderTests.swift */; };
 		DE4D68978A6952A5FA88D716 /* BatteryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107C87EF6929AB8C02EA0077 /* BatteryInfo.swift */; };
+		F342DF6C5F8683542596CEC2 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A5DB0F5FF87C6BE5AB74F8 /* DashboardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,10 +56,12 @@
 		16246E649BE87FA382C5511A /* BatteryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryViewModel.swift; sourceTree = "<group>"; };
 		19CF3916F5BBE81A50E94B39 /* ThemeContentHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeContentHelpers.swift; sourceTree = "<group>"; };
 		228841A11BE78873903EDF18 /* PowerSourceReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerSourceReader.swift; sourceTree = "<group>"; };
+		23A5DB0F5FF87C6BE5AB74F8 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		2E5BCAC7D39298606BEEA192 /* AppDiagnosticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDiagnosticsTests.swift; sourceTree = "<group>"; };
 		41AE88475A41D0888F510B25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		41CF069695B1E0538471131E /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		45B718CB287AB35BE17C2CA5 /* AppDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDiagnostics.swift; sourceTree = "<group>"; };
+		4A036596FDAA051A50477300 /* AppShellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShellView.swift; sourceTree = "<group>"; };
 		58C90B7B7D070DA47E54A955 /* SystemMenuBarBatteryIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMenuBarBatteryIcon.swift; sourceTree = "<group>"; };
 		5E1B8291AAD439DDF3882926 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		60E7297D504F69D3B34D2D67 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
@@ -207,7 +211,9 @@
 			isa = PBXGroup;
 			children = (
 				60E7297D504F69D3B34D2D67 /* AboutView.swift */,
+				4A036596FDAA051A50477300 /* AppShellView.swift */,
 				F4CF7E2FD2E29CF74D008119 /* BatterySectionViews.swift */,
+				23A5DB0F5FF87C6BE5AB74F8 /* DashboardView.swift */,
 				A0C6A7C48239FE2F0C9E99DE /* DiagnosticsView.swift */,
 				9734ADFBEB981282456B6221 /* GraphSettingsView.swift */,
 				41CF069695B1E0538471131E /* MenuView.swift */,
@@ -321,6 +327,7 @@
 				2E34D0B5CFD26DE001E5C3BD /* AboutView.swift in Sources */,
 				D5A7CA5355E91168A8D3EB51 /* AppDiagnostics.swift in Sources */,
 				C8E6A01A2B59F6299BE96679 /* AppSettings.swift in Sources */,
+				8B142BCB6A843A3A861001CE /* AppShellView.swift in Sources */,
 				CD8228F996CFCA35969BA917 /* BatteryHeroHeader.swift in Sources */,
 				DE4D68978A6952A5FA88D716 /* BatteryInfo.swift in Sources */,
 				22F192CF2676785F769C2F8F /* BatterySectionViews.swift in Sources */,
@@ -328,6 +335,7 @@
 				8FB35D4F32E35501ECF1BE0D /* BatteryViewModel.swift in Sources */,
 				5BCB6383D7F226452018B33F /* ChargerInfo.swift in Sources */,
 				492F59A5418AB7BF49B3F124 /* CompactPopoverLayout.swift in Sources */,
+				F342DF6C5F8683542596CEC2 /* DashboardView.swift in Sources */,
 				8E9ADD65ACF54EEF8D1AA5FF /* DiagnosticsView.swift in Sources */,
 				AE358FAA8A5800FC9BF5A40C /* GraphSettingsView.swift in Sources */,
 				CF564854F6C7A33480CAC6F2 /* LiquidGlassPopoverLayout.swift in Sources */,

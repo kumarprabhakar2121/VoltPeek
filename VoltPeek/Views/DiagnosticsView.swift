@@ -6,33 +6,39 @@ struct DiagnosticsView: View {
     @State private var reportText = ""
     @State private var hasCrash = false
     @State private var didCopy = false
+    @Environment(\.appScale) private var scale
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14 * scale) {
             Text("Diagnostics")
-                .font(.title2.bold())
+                .font(.system(size: 22 * scale, weight: .bold))
 
             Text("Logs stay on this Mac. Nothing is uploaded. If VoltPeek crashes or misbehaves, copy the report and email it to \(AppDiagnostics.supportEmail).")
-                .font(.callout)
+                .font(.system(size: 13 * scale))
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
 
             if hasCrash {
                 Label("A crash was recorded on a previous launch.", systemImage: "exclamationmark.triangle.fill")
-                    .font(.callout)
+                    .font(.system(size: 13 * scale))
                     .foregroundStyle(.orange)
             }
 
             ScrollView {
                 Text(reportText.isEmpty ? "Loading…" : reportText)
-                    .font(.system(.caption, design: .monospaced))
+                    .font(.system(size: 11 * scale, design: .monospaced))
                     .textSelection(.enabled)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(10)
+                    .padding(10 * scale)
             }
-            .background(.quaternary.opacity(0.35), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .frame(minHeight: 240 * scale, maxHeight: 400 * scale)
+            .background(
+                .quaternary.opacity(0.35),
+                in: RoundedRectangle(cornerRadius: 8 * scale, style: .continuous)
+            )
 
-            HStack(spacing: 10) {
+            HStack(spacing: 10 * scale) {
                 Button {
                     AppDiagnostics.shared.copySupportReportToPasteboard()
                     didCopy = true
@@ -64,11 +70,14 @@ struct DiagnosticsView: View {
             }
 
             Text("Tip: Email Support copies the report first — paste it into the message body.")
-                .font(.caption)
+                .font(.system(size: 11 * scale))
                 .foregroundStyle(.tertiary)
+            }
+            .font(.system(size: 13 * scale))
+            .padding(22 * scale)
+            .frame(maxWidth: 1080 * scale, alignment: .topLeading)
+            .frame(maxWidth: .infinity, alignment: .top)
         }
-        .padding(22)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .onAppear(perform: refresh)
         .onDisappear { didCopy = false }
     }

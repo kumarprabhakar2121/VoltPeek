@@ -4,7 +4,7 @@ import AppKit
 /// Shared Settings / Refresh / Quit footer.
 struct PopoverFooter: View {
     @Bindable var viewModel: BatteryViewModel
-    @Environment(\.openSettings) private var openSettings
+    @Environment(\.openWindow) private var openWindow
     @Environment(\.themeTypography) private var type
     @Environment(\.themeScale) private var scale
     @Environment(\.themeAccessibility) private var a11y
@@ -17,9 +17,8 @@ struct PopoverFooter: View {
 
             HStack {
                 Button {
-                    SettingsWindowPresenter.open {
-                        openSettings()
-                    }
+                    openWindow(id: AppWindow.main)
+                    NSApp.activate(ignoringOtherApps: true)
                 } label: {
                     Label("Settings…", systemImage: "gear")
                 }
@@ -67,34 +66,6 @@ private struct PopoverFooterButtonStyle: ButtonStyle {
                     NSCursor.pop()
                 }
             }
-    }
-}
-
-/// Presents the SwiftUI `Settings` scene from a menu bar (`LSUIElement`) app.
-@MainActor
-enum SettingsWindowPresenter {
-    private static var resignObserver: NSObjectProtocol?
-
-    static func open(using openSettings: @escaping () -> Void) {
-        if resignObserver == nil {
-            resignObserver = NotificationCenter.default.addObserver(
-                forName: NSApplication.didResignActiveNotification,
-                object: nil,
-                queue: .main
-            ) { _ in
-                let hasVisibleWindow = NSApp.windows.contains {
-                    $0.isVisible && !$0.className.contains("NSStatusBar") && $0.canBecomeKey
-                }
-                if !hasVisibleWindow {
-                    NSApp.setActivationPolicy(.accessory)
-                }
-            }
-        }
-
-        NSApp.setActivationPolicy(.regular)
-        NSApp.activate(ignoringOtherApps: true)
-        openSettings()
-        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
     }
 }
 

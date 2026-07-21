@@ -31,6 +31,7 @@ enum MenuBarStyle: String, CaseIterable, Identifiable, Sendable {
     case battery
     case watts
     case both
+    case hidden
 
     var id: String { rawValue }
 
@@ -39,6 +40,7 @@ enum MenuBarStyle: String, CaseIterable, Identifiable, Sendable {
         case .battery: return "Battery"
         case .watts: return "Watts"
         case .both: return "Both"
+        case .hidden: return "Hidden"
         }
     }
 
@@ -47,6 +49,7 @@ enum MenuBarStyle: String, CaseIterable, Identifiable, Sendable {
         case .battery: return "Percentage and system battery icon"
         case .watts: return "Live charging power"
         case .both: return "Watts plus battery"
+        case .hidden: return "Do not show a menu bar item"
         }
     }
 
@@ -199,6 +202,7 @@ struct AppSettings: Equatable, Sendable {
     var accessibility: AccessibilityPreferences
     var menuBarStyle: MenuBarStyle
     var menuBarBatteryAppearance: MenuBarBatteryAppearance
+    var appScalePercent: Int
 
     static let `default` = AppSettings(
         refreshIntervalSeconds: 3,
@@ -208,15 +212,21 @@ struct AppSettings: Equatable, Sendable {
         uiScale: .standard,
         accessibility: .default,
         menuBarStyle: .battery,
-        menuBarBatteryAppearance: .colored
+        menuBarBatteryAppearance: .colored,
+        appScalePercent: 100
     )
 
     /// Allowed discrete refresh intervals shown in Settings.
     static let refreshIntervalOptions: [Double] = [0.5, 1, 2, 3, 5, 10]
+    static let appScaleOptions: [Int] = Array(stride(from: 100, through: 300, by: 25))
 
     static func clampedInterval(_ value: Double) -> Double {
         let clamped = min(max(value, 0.5), 10)
         // Snap to nearest allowed option so polling stays on known steps.
         return refreshIntervalOptions.min(by: { abs($0 - clamped) < abs($1 - clamped) }) ?? 3
+    }
+
+    static func clampedAppScale(_ value: Int) -> Int {
+        appScaleOptions.min(by: { abs($0 - value) < abs($1 - value) }) ?? 100
     }
 }

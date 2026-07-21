@@ -1,6 +1,10 @@
 import SwiftUI
 import AppKit
 
+enum AppWindow {
+    static let main = "main"
+}
+
 @main
 struct VoltPeekApp: App {
     @State private var viewModel = BatteryViewModel()
@@ -10,7 +14,25 @@ struct VoltPeekApp: App {
     }
 
     var body: some Scene {
-        MenuBarExtra {
+        Window("VoltPeek", id: AppWindow.main) {
+            AppShellView(viewModel: viewModel)
+        }
+        .defaultSize(width: 980, height: 720)
+        .windowResizability(.contentMinSize)
+        .commands {
+            VoltPeekCommands(settingsManager: viewModel.settingsManager)
+        }
+
+        MenuBarExtra(isInserted: Binding(
+            get: { viewModel.settingsManager.menuBarStyle != .hidden },
+            set: { isInserted in
+                if !isInserted {
+                    viewModel.settingsManager.menuBarStyle = .hidden
+                } else if viewModel.settingsManager.menuBarStyle == .hidden {
+                    viewModel.settingsManager.menuBarStyle = .battery
+                }
+            }
+        )) {
             MenuView(viewModel: viewModel)
         } label: {
             MenuBarLabelView(viewModel: viewModel)
@@ -20,27 +42,34 @@ struct VoltPeekApp: App {
                 }
         }
         .menuBarExtraStyle(.window)
+    }
+}
 
-        Settings {
-            TabView {
-                SettingsView(settingsManager: viewModel.settingsManager)
-                    .tabItem {
-                        Label("General", systemImage: "gearshape")
-                    }
-                GraphSettingsView(viewModel: viewModel)
-                    .tabItem {
-                        Label("Power Graph", systemImage: "chart.xyaxis.line")
-                    }
-                DiagnosticsView()
-                    .tabItem {
-                        Label("Diagnostics", systemImage: "stethoscope")
-                    }
-                AboutView()
-                    .tabItem {
-                        Label("About", systemImage: "info.circle")
-                    }
+private struct VoltPeekCommands: Commands {
+    @Environment(\.openWindow) private var openWindow
+    let settingsManager: SettingsManager
+
+    var body: some Commands {
+        CommandGroup(replacing: .appSettings) {
+            Button("Show VoltPeek") {
+                openWindow(id: AppWindow.main)
+                NSApp.activate(ignoringOtherApps: true)
             }
-            .frame(width: 560, height: 620)
+            .keyboardShortcut(",", modifiers: .command)
+        }
+
+        CommandGroup(after: .toolbar) {
+            Button("Increase App Scale") {
+                settingsManager.appScalePercent += 25
+            }
+            .keyboardShortcut("+", modifiers: .command)
+            .disabled(settingsManager.appScalePercent >= 300)
+
+            Button("Decrease App Scale") {
+                settingsManager.appScalePercent -= 25
+            }
+            .keyboardShortcut("-", modifiers: .command)
+            .disabled(settingsManager.appScalePercent <= 100)
         }
     }
 }
@@ -95,6 +124,8 @@ private struct MenuBarLabelView: View {
                     appearance: batteryAppearance
                 ))
                 .renderingMode(.original)
+            case .hidden:
+                EmptyView()
             }
         }
         .environment(\.layoutDirection, .leftToRight)

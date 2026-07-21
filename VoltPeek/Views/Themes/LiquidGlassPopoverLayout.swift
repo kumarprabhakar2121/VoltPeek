@@ -67,6 +67,8 @@ struct LiquidGlassPopoverLayout: View {
                         .font(type.caption)
                         .foregroundStyle(.secondary)
                         .monospacedDigit()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
 

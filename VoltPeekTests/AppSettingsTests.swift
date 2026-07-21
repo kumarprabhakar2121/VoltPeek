@@ -35,17 +35,26 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertTrue(AppSettings.refreshIntervalOptions.contains(3))
     }
 
+    func testAppScaleUsesTwentyFivePercentSteps() {
+        XCTAssertEqual(AppSettings.appScaleOptions, [100, 125, 150, 175, 200, 225, 250, 275, 300])
+        XCTAssertEqual(AppSettings.clampedAppScale(90), 100)
+        XCTAssertEqual(AppSettings.clampedAppScale(138), 150)
+        XCTAssertEqual(AppSettings.clampedAppScale(320), 300)
+        XCTAssertEqual(AppSettings.default.appScalePercent, 100)
+    }
+
     func testPopoverThemeTitles() {
         XCTAssertEqual(PopoverTheme.compact.title, "List")
         XCTAssertEqual(PopoverTheme.material.title, "Cards")
         XCTAssertEqual(PopoverTheme.liquidGlass.title, "Glass")
     }
 
-    func testMenuBarStyleHasThreeCases() {
-        XCTAssertEqual(MenuBarStyle.allCases.map(\.rawValue), ["battery", "watts", "both"])
+    func testMenuBarStyleOptions() {
+        XCTAssertEqual(MenuBarStyle.allCases.map(\.rawValue), ["battery", "watts", "both", "hidden"])
         XCTAssertEqual(MenuBarStyle.battery.title, "Battery")
         XCTAssertEqual(MenuBarStyle.watts.title, "Watts")
         XCTAssertEqual(MenuBarStyle.both.title, "Both")
+        XCTAssertEqual(MenuBarStyle.hidden.title, "Hidden")
         XCTAssertEqual(AppSettings.default.menuBarStyle, .battery)
     }
 

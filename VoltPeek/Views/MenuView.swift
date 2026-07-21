@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Popover content shown when the menu bar icon is clicked.
+/// Themed popover content shown when the menu bar icon is clicked.
 struct MenuView: View {
     @Bindable var viewModel: BatteryViewModel
     @Environment(\.accessibilityDifferentiateWithoutColor) private var systemDifferentiateWithoutColor

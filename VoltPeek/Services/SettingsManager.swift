@@ -17,6 +17,8 @@ final class SettingsManager {
         static let differentiateWithoutColor = "a11yDifferentiateWithoutColor"
         static let menuBarStyle = "menuBarStyle"
         static let menuBarBatteryAppearance = "menuBarBatteryAppearance"
+        static let appScalePercent = "appScalePercent"
+        static let legacyDashboardScalePercent = "dashboardScalePercent"
     }
 
     private let defaults: UserDefaults
@@ -75,6 +77,17 @@ final class SettingsManager {
 
     var menuBarBatteryAppearance: MenuBarBatteryAppearance {
         didSet { defaults.set(menuBarBatteryAppearance.rawValue, forKey: Keys.menuBarBatteryAppearance) }
+    }
+
+    var appScalePercent: Int {
+        didSet {
+            let clamped = AppSettings.clampedAppScale(appScalePercent)
+            if clamped != appScalePercent {
+                appScalePercent = clamped
+                return
+            }
+            defaults.set(clamped, forKey: Keys.appScalePercent)
+        }
     }
 
     /// Curated size control; writes through to fontSize + uiScale.
@@ -153,6 +166,13 @@ final class SettingsManager {
             self.menuBarBatteryAppearance = AppSettings.default.menuBarBatteryAppearance
         }
 
+        let storedAppScale = defaults.object(forKey: Keys.appScalePercent) as? Int
+            ?? defaults.object(forKey: Keys.legacyDashboardScalePercent) as? Int
+            ?? AppSettings.default.appScalePercent
+        let normalizedAppScale = AppSettings.clampedAppScale(storedAppScale)
+        self.appScalePercent = normalizedAppScale
+        defaults.set(normalizedAppScale, forKey: Keys.appScalePercent)
+
         let serviceEnabled = SMAppService.mainApp.status == .enabled
         self.isSyncingLaunchAtLogin = true
         self.launchAtLogin = serviceEnabled
@@ -191,6 +211,7 @@ final class SettingsManager {
         differentiateWithoutColor = defaultsSettings.accessibility.differentiateWithoutColor
         menuBarStyle = defaultsSettings.menuBarStyle
         menuBarBatteryAppearance = defaultsSettings.menuBarBatteryAppearance
+        appScalePercent = defaultsSettings.appScalePercent
 
         // Launch at Login last so SMAppService matches the default (off).
         if launchAtLogin != defaultsSettings.launchAtLogin {

@@ -9,16 +9,18 @@ struct InfoRow: View {
     let value: String
 
     var body: some View {
-        HStack {
+        HStack(alignment: .firstTextBaseline, spacing: 8) {
             Text(label)
                 .font(type.body)
                 .foregroundStyle(.secondary.opacity(a11y.secondaryOpacity))
-            Spacer()
+                .fixedSize(horizontal: true, vertical: false)
             Text(value)
                 .font(type.body)
                 .fontWeight(a11y.boldText ? .bold : .semibold)
                 .foregroundStyle(.primary)
                 .multilineTextAlignment(.trailing)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }

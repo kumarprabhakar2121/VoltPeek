@@ -52,6 +52,7 @@ struct CompactPopoverLayout: View {
                     .foregroundStyle(.secondary.opacity(a11y.secondaryOpacity))
                     .monospacedDigit()
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             group("Adapter") {
@@ -93,19 +94,19 @@ struct CompactPopoverLayout: View {
     }
 
     private func metricRow(_ label: String, _ value: String, color: Color = .primary) -> some View {
-        HStack(alignment: .firstTextBaseline) {
+        HStack(alignment: .firstTextBaseline, spacing: 8) {
             Text(label)
                 .font(type.body)
                 .foregroundStyle(.secondary.opacity(a11y.secondaryOpacity))
-            Spacer(minLength: 8)
+                .fixedSize(horizontal: true, vertical: false)
             Text(value)
                 .font(type.body)
                 .fontWeight(a11y.boldText ? .bold : .semibold)
                 .monospacedDigit()
                 .foregroundStyle(color)
                 .multilineTextAlignment(.trailing)
-                .lineLimit(2)
-                .minimumScaleFactor(0.8)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .padding(.vertical, 1 * scale)
     }
