@@ -10,20 +10,28 @@ VoltPeek is a **fully offline** app. It does not need internet access and does n
 
 - Desktop Macs without a battery show limited or unavailable fields.
 - Adapter name, wattage, voltage, and current depend on what IOKit exposes for your charger.
+- Time-to-full and battery-runtime estimates appear only when macOS provides them. A fully charged Mac cannot produce an accurate discharge-runtime estimate until it is unplugged.
 - Very short refresh intervals (e.g. 0.5 s) use more CPU; prefer 2–3 s for everyday use.
 - Menu bar Battery / Watts / Both icons follow the system menu bar appearance (light or dark).
+- The top-center power-status pill uses the active window, pointer, or built-in display to choose a screen.
 - GitHub / Homebrew builds are ad-hoc signed (not notarized yet). First launch may need **Open Anyway** in Privacy & Security — see the [README](../README.md).
 
 ## Manual smoke checklist (before App Review)
 
-- [ ] App launches to menu bar only (no Dock icon)
+- [ ] App launches with a centered standalone window, Dock icon, and configured menu-bar item
+- [ ] Closing the window keeps the menu-bar item active; ⌘Q and Popover → Quit exit completely
+- [ ] Main window resizes cleanly across Dashboard, General, Power Graph, Diagnostics, and About
 - [ ] Popover opens; Status / Power / Health / Adapter show values
 - [ ] Switch themes: List, Cards, Glass
 - [ ] Change Display Size Compact → Extra Large; type visibly scales
-- [ ] Change menu bar style (Battery / Watts / Both) and battery appearance (Colored / B&W); label updates
+- [ ] Change menu bar style (Hidden / Battery / Watts / Both) and battery appearance (Colored / B&W); label updates
+- [ ] Restore a hidden menu-bar item from the Dock app under General
 - [ ] Refresh interval change takes effect within a few seconds
-- [ ] Settings → Power Graph shows a sparkline after some samples
-- [ ] Settings → Diagnostics can copy a report and reveal the local log folder
+- [ ] Power Graph shows 10 minutes of history, statistics, axes, and hover details
+- [ ] Battery Log (Beta) records charging and battery-use sessions without counting sleep or restart gaps
+- [ ] Plug in, unplug, reach low battery, and fully charge: the top-center pill appears briefly with the correct state, estimate, color, and gentle sound
+- [ ] General → Behavior can disable the power-status pill and its sounds
+- [ ] Diagnostics can copy a report, reveal the local folder, and retain only today's activity log
 - [ ] About shows version and support email link
 - [ ] Launch at Login toggle works (may need approval in System Settings)
 - [ ] Reset All Settings restores defaults
@@ -31,4 +39,4 @@ VoltPeek is a **fully offline** app. It does not need internet access and does n
 
 ## Bug reports
 
-Include: macOS version, Mac model (Apple Silicon / Intel), VoltPeek version (**Settings → About**), steps to reproduce, a screenshot if relevant, and optionally a Diagnostics report (**Settings → Diagnostics → Copy Report**).
+Include: macOS version, Mac model (Apple Silicon / Intel), VoltPeek version (**About**), steps to reproduce, a screenshot if relevant, and optionally a report from **Diagnostics → Copy Report**.

@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Support — VoltPeek</title>
-  <meta name="description" content="VoltPeek support. Contact hello@voltpeek.app for help with the macOS menu bar battery app." />
+  <meta name="description" content="VoltPeek support. Contact hello@voltpeek.app for help with the macOS battery dashboard and menu-bar utility." />
   <style>
     :root {
       --bg: #0f1410;
@@ -79,7 +79,7 @@
   <main>
     <p class="brand">VoltPeek</p>
     <h1>Support</h1>
-    <p class="meta">Native macOS menu bar battery telemetry · Fully offline</p>
+    <p class="meta">Native macOS battery dashboard and menu-bar telemetry · Fully offline</p>
 
     <div class="card">
       <p style="margin:0"><strong>Email:</strong> <a href="mailto:hello@voltpeek.app">hello@voltpeek.app</a></p>
@@ -93,13 +93,17 @@
     <ul>
       <li>Desktop Macs without a battery show limited or unavailable fields.</li>
       <li>Adapter name, wattage, voltage, and current depend on what IOKit exposes for your charger.</li>
+      <li>Time-to-full and battery-runtime estimates appear only when macOS provides them. Runtime for a fully charged Mac becomes measurable after unplugging.</li>
       <li>Very short refresh intervals (e.g. 0.5 s) use more CPU; prefer 2–3 s for everyday use.</li>
       <li>Menu bar Battery / Watts / Both icons follow the system menu bar appearance (light or dark).</li>
       <li>GitHub / Homebrew builds are not Apple-notarized yet; first launch may need Open Anyway.</li>
     </ul>
 
+    <h2>Window and background behavior</h2>
+    <p>The red close button closes only the main window; battery monitoring, the configured menu-bar item, and power-status alerts continue in the background. Use <strong>⌘Q</strong> or <strong>Quit</strong> in the popover to exit VoltPeek completely.</p>
+
     <h2>Bug reports</h2>
-    <p>Include: macOS version, Mac model (Apple Silicon / Intel), VoltPeek version (<strong>Settings → About</strong>), steps to reproduce, a screenshot if relevant, and optionally a Diagnostics report (<strong>Settings → Diagnostics → Copy Report</strong>).</p>
+    <p>Include: macOS version, Mac model (Apple Silicon / Intel), VoltPeek version (<strong>About</strong>), steps to reproduce, a screenshot if relevant, and optionally a report from <strong>Diagnostics → Copy Report</strong>.</p>
 
     <footer>
       <nav>

@@ -1,4 +1,5 @@
 import Foundation
+import IOKit.ps
 
 /// A single wattage sample for the rolling 10-minute graph.
 struct WattageSample: Equatable, Sendable {
@@ -19,18 +20,26 @@ final class BatteryService {
     var onUpdate: (() -> Void)?
 
     private let reader: PowerSourceReader
+    let batteryLogStore: BatteryLogStore
     private var pollingTask: Task<Void, Never>?
+    private var powerChangeBurstTask: Task<Void, Never>?
+    private var powerSourceRunLoopSource: CFRunLoopSource?
     private var isReading = false
     private let historyWindow: TimeInterval = 10 * 60
 
-    init(reader: PowerSourceReader = PowerSourceReader()) {
+    init(
+        reader: PowerSourceReader = PowerSourceReader(),
+        batteryLogStore: BatteryLogStore? = nil
+    ) {
         self.reader = reader
+        self.batteryLogStore = batteryLogStore ?? BatteryLogStore()
     }
 
     /// Starts (or restarts) polling at the given interval in seconds.
     func startPolling(intervalSeconds: Double) {
         stopPolling()
         let interval = AppSettings.clampedInterval(intervalSeconds)
+        installPowerSourceNotifications()
         refresh()
         pollingTask = Task { [weak self] in
             while !Task.isCancelled {
@@ -45,6 +54,16 @@ final class BatteryService {
     func stopPolling() {
         pollingTask?.cancel()
         pollingTask = nil
+        powerChangeBurstTask?.cancel()
+        powerChangeBurstTask = nil
+        if let powerSourceRunLoopSource {
+            CFRunLoopRemoveSource(
+                CFRunLoopGetMain(),
+                powerSourceRunLoopSource,
+                .defaultMode
+            )
+            self.powerSourceRunLoopSource = nil
+        }
     }
 
     /// Performs a single coalesced read from the system.
@@ -65,8 +84,48 @@ final class BatteryService {
         let snapshot = reader.read()
         battery = snapshot.battery
         charger = snapshot.charger
+        batteryLogStore.record(battery)
         appendWattageSample(battery.watts)
         onUpdate?()
+    }
+
+    private func installPowerSourceNotifications() {
+        guard powerSourceRunLoopSource == nil else { return }
+        let context = Unmanaged.passUnretained(self).toOpaque()
+        guard let source = IOPSNotificationCreateRunLoopSource({ context in
+            guard let context else { return }
+            let service = Unmanaged<BatteryService>
+                .fromOpaque(context)
+                .takeUnretainedValue()
+            Task { @MainActor in
+                service.schedulePowerSourceRefreshBurst()
+            }
+        }, context)?.takeRetainedValue() else {
+            return
+        }
+
+        powerSourceRunLoopSource = source
+        CFRunLoopAddSource(CFRunLoopGetMain(), source, .defaultMode)
+    }
+
+    private func schedulePowerSourceRefreshBurst() {
+        powerChangeBurstTask?.cancel()
+        powerChangeBurstTask = Task { [weak self] in
+            let delays: [Duration] = [
+                .zero,
+                .milliseconds(180),
+                .milliseconds(420),
+                .milliseconds(900)
+            ]
+            for delay in delays {
+                guard !Task.isCancelled else { return }
+                if delay != .zero {
+                    try? await Task.sleep(for: delay)
+                }
+                guard !Task.isCancelled else { return }
+                self?.refresh()
+            }
+        }
     }
 
     private func appendWattageSample(_ watts: Double?) {

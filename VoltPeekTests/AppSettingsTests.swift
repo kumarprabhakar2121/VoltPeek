@@ -35,17 +35,17 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertTrue(AppSettings.refreshIntervalOptions.contains(3))
     }
 
-    func testAppScaleUsesTwentyFivePercentSteps() {
-        XCTAssertEqual(AppSettings.appScaleOptions, [100, 125, 150, 175, 200, 225, 250, 275, 300])
-        XCTAssertEqual(AppSettings.clampedAppScale(90), 100)
-        XCTAssertEqual(AppSettings.clampedAppScale(138), 150)
-        XCTAssertEqual(AppSettings.clampedAppScale(320), 300)
+    func testAppScaleUsesTwentyPercentSteps() {
+        XCTAssertEqual(AppSettings.appScaleOptions, [80, 100, 120, 140, 160, 180, 200])
+        XCTAssertEqual(AppSettings.clampedAppScale(70), 80)
+        XCTAssertEqual(AppSettings.clampedAppScale(138), 140)
+        XCTAssertEqual(AppSettings.clampedAppScale(220), 200)
         XCTAssertEqual(AppSettings.default.appScalePercent, 100)
     }
 
     func testAppScaleClampingHandlesExtremeStoredValues() {
-        XCTAssertEqual(AppSettings.clampedAppScale(Int.min), 100)
-        XCTAssertEqual(AppSettings.clampedAppScale(Int.max), 300)
+        XCTAssertEqual(AppSettings.clampedAppScale(Int.min), 80)
+        XCTAssertEqual(AppSettings.clampedAppScale(Int.max), 200)
     }
 
     func testPopoverThemeTitles() {
@@ -68,6 +68,11 @@ final class AppSettingsTests: XCTestCase {
         XCTAssertEqual(MenuBarBatteryAppearance.colored.title, "Colored")
         XCTAssertEqual(MenuBarBatteryAppearance.monochrome.title, "Black & White")
         XCTAssertEqual(AppSettings.default.menuBarBatteryAppearance, .colored)
+    }
+
+    func testPowerStatusPillDefaultsToVisualsAndGentleSoundsEnabled() {
+        XCTAssertTrue(AppSettings.default.powerStatusPillEnabled)
+        XCTAssertTrue(AppSettings.default.powerStatusPillSoundsEnabled)
     }
 
     func testMenuBarStyleMigrationFromLegacyRawValues() {

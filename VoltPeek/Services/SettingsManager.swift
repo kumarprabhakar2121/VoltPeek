@@ -19,6 +19,8 @@ final class SettingsManager {
         static let menuBarBatteryAppearance = "menuBarBatteryAppearance"
         static let appScalePercent = "appScalePercent"
         static let legacyDashboardScalePercent = "dashboardScalePercent"
+        static let powerStatusPillEnabled = "powerStatusPillEnabled"
+        static let powerStatusPillSoundsEnabled = "powerStatusPillSoundsEnabled"
     }
 
     private let defaults: UserDefaults
@@ -87,6 +89,19 @@ final class SettingsManager {
                 return
             }
             defaults.set(clamped, forKey: Keys.appScalePercent)
+        }
+    }
+
+    var powerStatusPillEnabled: Bool {
+        didSet { defaults.set(powerStatusPillEnabled, forKey: Keys.powerStatusPillEnabled) }
+    }
+
+    var powerStatusPillSoundsEnabled: Bool {
+        didSet {
+            defaults.set(
+                powerStatusPillSoundsEnabled,
+                forKey: Keys.powerStatusPillSoundsEnabled
+            )
         }
     }
 
@@ -173,6 +188,15 @@ final class SettingsManager {
         self.appScalePercent = normalizedAppScale
         defaults.set(normalizedAppScale, forKey: Keys.appScalePercent)
 
+        self.powerStatusPillEnabled =
+            defaults.object(forKey: Keys.powerStatusPillEnabled) == nil
+                ? AppSettings.default.powerStatusPillEnabled
+                : defaults.bool(forKey: Keys.powerStatusPillEnabled)
+        self.powerStatusPillSoundsEnabled =
+            defaults.object(forKey: Keys.powerStatusPillSoundsEnabled) == nil
+                ? AppSettings.default.powerStatusPillSoundsEnabled
+                : defaults.bool(forKey: Keys.powerStatusPillSoundsEnabled)
+
         let serviceEnabled = SMAppService.mainApp.status == .enabled
         self.isSyncingLaunchAtLogin = true
         self.launchAtLogin = serviceEnabled
@@ -216,6 +240,8 @@ final class SettingsManager {
         menuBarStyle = defaultsSettings.menuBarStyle
         menuBarBatteryAppearance = defaultsSettings.menuBarBatteryAppearance
         appScalePercent = defaultsSettings.appScalePercent
+        powerStatusPillEnabled = defaultsSettings.powerStatusPillEnabled
+        powerStatusPillSoundsEnabled = defaultsSettings.powerStatusPillSoundsEnabled
 
         // Launch at Login last so SMAppService matches the default (off).
         if launchAtLogin != defaultsSettings.launchAtLogin {

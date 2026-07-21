@@ -10,7 +10,7 @@ VoltPeek is free for users ($0). You still need an **Apple Developer Program** m
    Source: [PRIVACY.md](PRIVACY.md) → hosted page [privacy.html](privacy.html).  
    **Support URL:** `https://kumarprabhakar2121.github.io/VoltPeek/support.html`  
    Enable GitHub Pages once: repo **Settings → Pages → Deploy from a branch → `main` / `/docs`**.
-4. Prepare screenshots (menu bar + popover List/Cards/Glass; Settings).
+4. Prepare screenshots of the Dashboard, General settings, Power Graph, Battery Log (Beta), top-center power-status pill, menu bar, and List/Cards/Glass popovers.
 5. In Xcode: Signing & Capabilities → Team = your Apple ID team; enable Hardened Runtime (already on).
 
 ## Build & upload
@@ -34,7 +34,9 @@ VoltPeek is free for users ($0). You still need an **Apple Developer Program** m
 
 ## Review notes tip
 
-Mention: menu bar–only (`LSUIElement`); local IOKit battery reads only; fully offline (no networking/telemetry); optional on-device Diagnostics the user can email; support `hello@voltpeek.app`.
+Mention: standard macOS app with a companion menu-bar item; closing the main window leaves menu-bar monitoring active while Quit/⌘Q exits completely; local IOKit battery reads only; fully offline (no networking/telemetry); local power-status pill and sounds; optional on-device Diagnostics the user can explicitly share; support `hello@voltpeek.app`.
+
+Before submission, complete the smoke checklist in [SUPPORT.md](SUPPORT.md), including background lifecycle, all popover themes, the 10-minute graph, daily diagnostic-log rotation, and charging/unplugged/low-battery/fully-charged pill states.
 
 ## Current project versions
 

@@ -33,6 +33,9 @@ struct AppShellView: View {
         }
         .frame(minWidth: 700, idealWidth: 820, minHeight: 520, idealHeight: 600)
         .background(InitialWindowConfigurator())
+        .task {
+            configurePowerMonitoring()
+        }
     }
 
     private var appContent: some View {
@@ -96,14 +99,16 @@ struct AppShellView: View {
                         }
 
                         Button {
-                            viewModel.settingsManager.appScalePercent -= 25
+                            viewModel.settingsManager.appScalePercent -= AppSettings.appScaleStep
                         } label: {
                             Image(systemName: "minus")
                                 .font(.system(size: 11 * chromeScale, weight: .semibold))
                         }
                         .buttonStyle(.bordered)
                         .controlSize(chromeScale == 1 ? .small : .large)
-                        .disabled(viewModel.settingsManager.appScalePercent <= 100)
+                        .disabled(
+                            viewModel.settingsManager.appScalePercent <= AppSettings.appScaleMinimum
+                        )
                         .accessibilityLabel("Zoom out")
                         .help("Zoom out (⌘−)")
 
@@ -112,14 +117,16 @@ struct AppShellView: View {
                             .frame(minWidth: 48 * chromeScale)
 
                         Button {
-                            viewModel.settingsManager.appScalePercent += 25
+                            viewModel.settingsManager.appScalePercent += AppSettings.appScaleStep
                         } label: {
                             Image(systemName: "plus")
                                 .font(.system(size: 11 * chromeScale, weight: .semibold))
                         }
                         .buttonStyle(.bordered)
                         .controlSize(chromeScale == 1 ? .small : .large)
-                        .disabled(viewModel.settingsManager.appScalePercent >= 300)
+                        .disabled(
+                            viewModel.settingsManager.appScalePercent >= AppSettings.appScaleMaximum
+                        )
                         .accessibilityLabel("Zoom in")
                         .help("Zoom in (⌘+)")
 
@@ -156,6 +163,19 @@ struct AppShellView: View {
         .background(AppPalette.canvas)
     }
 
+    private func configurePowerMonitoring() {
+        let model = viewModel
+        let settingsManager = viewModel.settingsManager
+        viewModel.onPowerAlert = { [weak settingsManager] event in
+            guard let settingsManager else { return }
+            PowerAlertCoordinator.shared.present(event, settings: settingsManager)
+        }
+        PowerAlertCoordinator.shared.onSystemWake = { [weak model] in
+            model?.resetPowerAlertBaseline()
+        }
+        viewModel.start()
+    }
+
     @ViewBuilder
     private func detail(for section: AppSection) -> some View {
         switch section {
@@ -165,6 +185,8 @@ struct AppShellView: View {
             SettingsView(settingsManager: viewModel.settingsManager)
         case .powerGraph:
             GraphSettingsView(viewModel: viewModel)
+        case .batteryLog:
+            BatteryLogView(viewModel: viewModel)
         case .diagnostics:
             DiagnosticsView()
         case .about:
@@ -186,6 +208,7 @@ private enum AppSection: String, CaseIterable, Identifiable {
     case dashboard
     case general
     case powerGraph
+    case batteryLog
     case diagnostics
     case about
 
@@ -196,6 +219,7 @@ private enum AppSection: String, CaseIterable, Identifiable {
         case .dashboard: return "Dashboard"
         case .general: return "General"
         case .powerGraph: return "Power Graph"
+        case .batteryLog: return "Log · Beta"
         case .diagnostics: return "Diagnostics"
         case .about: return "About"
         }
@@ -206,6 +230,7 @@ private enum AppSection: String, CaseIterable, Identifiable {
         case .dashboard: return "battery.100"
         case .general: return "gearshape"
         case .powerGraph: return "chart.xyaxis.line"
+        case .batteryLog: return "clock.arrow.circlepath"
         case .diagnostics: return "stethoscope"
         case .about: return "info.circle"
         }

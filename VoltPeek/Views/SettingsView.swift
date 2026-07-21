@@ -137,7 +137,7 @@ struct SettingsView: View {
                     settingsSection(
                         title: "Behavior",
                         systemImage: "gearshape",
-                        description: "Control updates and startup behavior."
+                        description: "Control updates, startup, and power-status alerts."
                     ) {
                         settingsPanel {
                             settingsRow("Refresh Interval") {
@@ -153,6 +153,27 @@ struct SettingsView: View {
                                 Toggle("Launch at Login", isOn: $settingsManager.launchAtLogin)
                                     .labelsHidden()
                                     .toggleStyle(.switch)
+                            }
+                            Divider()
+                            settingsRow("Power Status Pill") {
+                                Toggle(
+                                    "Power Status Pill",
+                                    isOn: $settingsManager.powerStatusPillEnabled
+                                )
+                                .labelsHidden()
+                                .toggleStyle(.switch)
+                                .help("Show a brief top-center alert for charging, unplugged, low battery, and fully charged states.")
+                            }
+                            Divider()
+                            settingsRow("Play Gentle Sounds") {
+                                Toggle(
+                                    "Play Gentle Sounds",
+                                    isOn: $settingsManager.powerStatusPillSoundsEnabled
+                                )
+                                .labelsHidden()
+                                .toggleStyle(.switch)
+                                .disabled(!settingsManager.powerStatusPillEnabled)
+                                .help("Play a quiet, distinct tone with each power-status alert.")
                             }
                         }
                         }

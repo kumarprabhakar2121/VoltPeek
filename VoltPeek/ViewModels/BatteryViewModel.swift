@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import AppKit
 
 /// Bridges `BatteryService` and `SettingsManager` to the menu bar label and popover.
 @MainActor
@@ -12,10 +13,17 @@ final class BatteryViewModel {
     private(set) var battery: BatteryInfo = .unavailable
     private(set) var charger: ChargerInfo = .unavailable
     private(set) var wattageHistory: [WattageSample] = []
+    private(set) var batteryLogEntries: [BatteryLogEntry] = []
     /// Bumps on every successful poll so MenuBarExtra labels can `.id` against it.
     private(set) var menuBarEpoch: UInt64 = 0
+    var onPowerAlert: ((PowerAlertEvent) -> Void)?
 
     private var intervalObservationTask: Task<Void, Never>?
+    private var sleepObservationTask: Task<Void, Never>?
+    private var wakeObservationTask: Task<Void, Never>?
+    private var terminationObservationTask: Task<Void, Never>?
+    private var powerAlertDetector = PowerAlertTransitionDetector()
+    private var isStarted = false
 
     init(
         batteryService: BatteryService? = nil,
@@ -30,10 +38,13 @@ final class BatteryViewModel {
     }
 
     func start() {
+        guard !isStarted else { return }
+        isStarted = true
         AppDiagnostics.shared.log(
             "Battery monitoring started (refresh every \(settingsManager.refreshIntervalSeconds)s)"
         )
         batteryService.startPolling(intervalSeconds: settingsManager.refreshIntervalSeconds)
+        observeLifecycle()
         intervalObservationTask?.cancel()
         intervalObservationTask = Task { [weak self] in
             var lastInterval = self?.settingsManager.refreshIntervalSeconds
@@ -51,10 +62,57 @@ final class BatteryViewModel {
     }
 
     private func pullFromService() {
-        battery = batteryService.battery
+        let latestBattery = batteryService.battery
+        battery = latestBattery
         charger = batteryService.charger
         wattageHistory = batteryService.wattageHistory
+        batteryLogEntries = batteryService.batteryLogStore.allEntriesNewestFirst
         menuBarEpoch &+= 1
+        if let event = powerAlertDetector.consume(latestBattery) {
+            onPowerAlert?(event)
+        }
+    }
+
+    private func observeLifecycle() {
+        sleepObservationTask = Task { [weak self] in
+            for await _ in NSWorkspace.shared.notificationCenter.notifications(
+                named: NSWorkspace.willSleepNotification
+            ) {
+                guard !Task.isCancelled else { break }
+                self?.handleSleep()
+            }
+        }
+        wakeObservationTask = Task { [weak self] in
+            for await _ in NSWorkspace.shared.notificationCenter.notifications(
+                named: NSWorkspace.didWakeNotification
+            ) {
+                guard !Task.isCancelled else { break }
+                self?.handleWake()
+            }
+        }
+        terminationObservationTask = Task { [weak self] in
+            for await _ in NotificationCenter.default.notifications(
+                named: NSApplication.willTerminateNotification
+            ) {
+                guard !Task.isCancelled else { break }
+                self?.batteryService.batteryLogStore.handleAppTermination()
+                self?.pullFromService()
+            }
+        }
+    }
+
+    func handleSleep(at date: Date = Date()) {
+        batteryService.batteryLogStore.handleSleep(at: date)
+        pullFromService()
+    }
+
+    func handleWake() {
+        batteryService.batteryLogStore.handleWake()
+        batteryService.forceRefresh()
+    }
+
+    func resetPowerAlertBaseline() {
+        powerAlertDetector.reset()
     }
 
     /// Signed watts string for Watts / Both menu bar styles.

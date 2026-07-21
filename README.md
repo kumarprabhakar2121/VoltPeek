@@ -1,8 +1,8 @@
 # VoltPeek
 
-**Live battery and charging telemetry in your Mac menu bar.**
+**Live battery and charging telemetry in your Mac menu bar and a full native dashboard.**
 
-VoltPeek is a native macOS menu bar app for MacBooks that surfaces the charging details macOS keeps buried — signed wattage, current, voltage, temperature, health, cycle count, and adapter info — updating every few seconds with almost no resource cost.
+VoltPeek is a native macOS battery utility for MacBooks that surfaces the charging details macOS keeps buried — signed wattage, current, voltage, temperature, health, cycle count, and adapter info — in both a lightweight menu-bar popover and a responsive standalone app.
 
 Built for developers and power users who want to know *how* the pack is charging, not just that it is.
 
@@ -32,23 +32,41 @@ Power values are **signed**: positive while charging into the pack, negative whi
 ## Features
 
 ### Menu bar
-- Three styles: Battery, Watts, Both
+- Four styles: Hidden, Battery, Watts, Both
 - Battery appearance: Colored or Black & White
-- Menu-bar-only app — no Dock icon
+- Continues monitoring when the main window is closed; use **Quit** or ⌘Q to exit completely
 
 ### Popover look
 - Themes: **List** (dense), **Cards** (grouped), **Glass** (frosted)
 - Display Size: Compact → Extra Large (type and spacing scale together)
+- Subtle layered surfaces and a gentle green background tint while actively charging
 - Follows system Light / Dark appearance (no separate theme toggle)
+
+### Standalone app
+- Responsive Dashboard, General, Power Graph, Battery Log (Beta), Diagnostics, and About tabs
+- Battery Log (Beta) records local charging and battery-use sessions while excluding sleep and app-restart gaps
+- Standard Dock icon and macOS window controls
+- Opens centered at 75% of the active screen's usable area
+- App zoom from 80%–200% in 20% steps with crisp native rendering
+- Closing the window keeps VoltPeek running in the menu bar
 
 ### Live updates
 - Configurable refresh: 0.5–10 seconds (default 3 s)
-- Power Graph tab with a short wattage sparkline (~60 s)
+- Immediate power-source change refresh with polling fallback
+- Interactive 10-minute signed-wattage graph with axes, grid lines, hover details, and current/minimum/average/maximum statistics
+
+### Power status pill
+- Brief top-center alerts for charging, unplugged/on battery, low battery, and fully charged states
+- Shows time to full or estimated battery runtime when macOS provides it
+- Distinct high-contrast state colors and gentle low-volume sounds
+- Non-activating and multi-display aware; it does not steal keyboard focus
+- Visual and sound controls are available under **General → Behavior**
 
 ### Preferences
 - Launch at Login
 - Accessibility overrides: contrast, bold text, reduce transparency, differentiate without color
-- Local Diagnostics (on-device logs; copy / email / clear — nothing is uploaded automatically)
+- Local Diagnostics with one current-day activity log; older activity logs are removed automatically
+- Copy, email, or report diagnostics manually — nothing is uploaded automatically
 - Reset All Settings
 
 ---
@@ -67,7 +85,7 @@ Details: [docs/HOMEBREW.md](docs/HOMEBREW.md).
 
 1. Download `VoltPeek-*.dmg` from [Releases](https://github.com/kumarprabhakar2121/VoltPeek/releases)
 2. Open the DMG and drag **VoltPeek** to **Applications**
-3. Launch from Applications (menu bar only — no Dock icon)
+3. Launch from Applications; VoltPeek opens its dashboard and adds the configured menu-bar item
 
 ### First launch (macOS blocks the app)
 
@@ -90,7 +108,7 @@ On first open you may see:
 6. Enter your password / Touch ID if asked
 7. Click **Open** once more
 
-VoltPeek then appears in the menu bar (no Dock icon). After this, normal launch works.
+VoltPeek then opens normally with its dashboard, Dock icon, and menu-bar item.
 
 **Faster alternative:** Finder → **Applications** → right-click **VoltPeek** → **Open** → **Open**.
 
@@ -115,7 +133,7 @@ xcodegen generate
 open VoltPeek.xcodeproj
 ```
 
-Build and run the **VoltPeek** scheme. The app appears in the menu bar only.
+Build and run the **VoltPeek** scheme. The standalone app and menu-bar item start together.
 
 ---
 

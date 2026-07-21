@@ -19,13 +19,14 @@ The app does **not** read your files, photos, contacts, messages, browsing histo
 
 ## Local diagnostics (optional, on-device)
 
-VoltPeek may write diagnostic logs and crash markers under Application Support on your Mac so you can debug issues. These files stay local. Nothing is uploaded automatically. You can copy or email a report yourself from **Settings → Diagnostics** if you choose to contact support.
+VoltPeek may write diagnostic logs and crash markers under Application Support on your Mac so you can debug issues. It keeps one activity log for the current local calendar day and removes older activity logs automatically; the latest crash marker is retained until cleared. These files stay local. Nothing is uploaded automatically. You can copy or email a report yourself from **Diagnostics** if you choose to contact support.
 
 ## Accounts and networking
 
 - No account or sign-in
 - No network requests (no telemetry, ads, or analytics)
 - Optional Launch at Login uses macOS Service Management on-device
+- Optional top-center power-status alerts and gentle sounds are generated locally from battery state changes
 - Optional support email uses your Mail app (`mailto:`) only when you tap it
 
 ## Third parties

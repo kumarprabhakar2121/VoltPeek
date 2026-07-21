@@ -14,7 +14,7 @@ struct DiagnosticsView: View {
             Text("Diagnostics")
                 .font(.system(size: 22 * scale, weight: .bold))
 
-            Text("Activity logs and crash stack traces stay on this Mac until you choose to report a problem.")
+            Text("Today's activity log and the latest crash details stay on this Mac unless you clear them or choose to share a report.")
                 .font(.system(size: 13 * scale))
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)

@@ -7,6 +7,7 @@ enum AppWindow {
 
 @main
 struct VoltPeekApp: App {
+    @NSApplicationDelegateAdaptor(VoltPeekAppDelegate.self) private var appDelegate
     @State private var viewModel = BatteryViewModel()
 
     init() {
@@ -37,11 +38,16 @@ struct VoltPeekApp: App {
         } label: {
             MenuBarLabelView(viewModel: viewModel)
                 .id("\(viewModel.menuBarEpoch)|\(viewModel.settingsManager.accessibility.fingerprint)|\(viewModel.settingsManager.menuBarStyle.rawValue)|\(viewModel.settingsManager.menuBarBatteryAppearance.rawValue)")
-                .task {
-                    viewModel.start()
-                }
         }
         .menuBarExtraStyle(.window)
+    }
+}
+
+final class VoltPeekAppDelegate: NSObject, NSApplicationDelegate {
+    func applicationShouldTerminateAfterLastWindowClosed(
+        _ sender: NSApplication
+    ) -> Bool {
+        false
     }
 }
 
@@ -60,16 +66,16 @@ private struct VoltPeekCommands: Commands {
 
         CommandGroup(after: .toolbar) {
             Button("Zoom In") {
-                settingsManager.appScalePercent += 25
+                settingsManager.appScalePercent += AppSettings.appScaleStep
             }
             .keyboardShortcut("+", modifiers: .command)
-            .disabled(settingsManager.appScalePercent >= 300)
+            .disabled(settingsManager.appScalePercent >= AppSettings.appScaleMaximum)
 
             Button("Zoom Out") {
-                settingsManager.appScalePercent -= 25
+                settingsManager.appScalePercent -= AppSettings.appScaleStep
             }
             .keyboardShortcut("-", modifiers: .command)
-            .disabled(settingsManager.appScalePercent <= 100)
+            .disabled(settingsManager.appScalePercent <= AppSettings.appScaleMinimum)
         }
     }
 }

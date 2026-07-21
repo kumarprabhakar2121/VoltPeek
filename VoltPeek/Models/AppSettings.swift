@@ -203,6 +203,8 @@ struct AppSettings: Equatable, Sendable {
     var menuBarStyle: MenuBarStyle
     var menuBarBatteryAppearance: MenuBarBatteryAppearance
     var appScalePercent: Int
+    var powerStatusPillEnabled: Bool
+    var powerStatusPillSoundsEnabled: Bool
 
     static let `default` = AppSettings(
         refreshIntervalSeconds: 3,
@@ -213,12 +215,19 @@ struct AppSettings: Equatable, Sendable {
         accessibility: .default,
         menuBarStyle: .battery,
         menuBarBatteryAppearance: .colored,
-        appScalePercent: 100
+        appScalePercent: 100,
+        powerStatusPillEnabled: true,
+        powerStatusPillSoundsEnabled: true
     )
 
     /// Allowed discrete refresh intervals shown in Settings.
     static let refreshIntervalOptions: [Double] = [0.5, 1, 2, 3, 5, 10]
-    static let appScaleOptions: [Int] = Array(stride(from: 100, through: 300, by: 25))
+    static let appScaleMinimum = 80
+    static let appScaleMaximum = 200
+    static let appScaleStep = 20
+    static let appScaleOptions: [Int] = Array(
+        stride(from: appScaleMinimum, through: appScaleMaximum, by: appScaleStep)
+    )
 
     static func clampedInterval(_ value: Double) -> Double {
         let clamped = min(max(value, 0.5), 10)

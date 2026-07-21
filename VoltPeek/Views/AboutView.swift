@@ -18,10 +18,10 @@ struct AboutView: View {
                     .font(.system(size: 22 * scale, weight: .bold))
                 Text("Version \(version)")
                     .foregroundStyle(.secondary)
-                Text("A lightweight menu bar app that shows live battery and charging details for your Mac.")
+                Text("A native Mac battery utility with a responsive dashboard, menu-bar telemetry, power history, and charging alerts.")
                     .fixedSize(horizontal: false, vertical: true)
 
-                Text("VoltPeek reads battery data locally via IOKit. It does not collect telemetry or require an account. Optional diagnostics logs stay on this Mac until you choose to share them (Settings → Diagnostics).")
+                Text("VoltPeek reads battery data locally via IOKit. It does not collect telemetry or require an account. Diagnostics keep today's activity log and the latest crash marker on this Mac unless you clear them.")
                     .font(.system(size: 13 * scale))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
