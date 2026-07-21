@@ -17,7 +17,7 @@ struct BatteryLogView: View {
                         .padding(.vertical, 3 * scale)
                         .background(Color.accentColor.opacity(0.14), in: Capsule())
                 }
-                Text("Charging and battery-use sessions. Sleep and app restart gaps are excluded.")
+                Text("Your latest 100 charging and battery-use sessions. Sleep and app restart gaps are excluded.")
                     .font(.system(size: 13 * scale))
                     .foregroundStyle(.secondary)
 

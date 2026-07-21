@@ -8,7 +8,7 @@ final class PowerAlertPresentationTests: XCTestCase {
 
         let frame = PowerAlertLayout.frame(in: screen)
 
-        XCTAssertEqual(frame, CGRect(x: 755, y: 980, width: 290, height: 62))
+        XCTAssertEqual(frame, CGRect(x: 760, y: 986, width: 280, height: 56))
         XCTAssertEqual(frame.midX, screen.midX)
         XCTAssertEqual(screen.maxY - frame.maxY, 8)
     }

@@ -44,7 +44,7 @@ Power values are **signed**: positive while charging into the pack, negative whi
 
 ### Standalone app
 - Responsive Dashboard, General, Power Graph, Battery Log (Beta), Diagnostics, and About tabs
-- Battery Log (Beta) records local charging and battery-use sessions while excluding sleep and app-restart gaps
+- Battery Log (Beta) stores the latest 100 charging and battery-use sessions in an atomic local JSON file while excluding sleep and app-restart gaps
 - Standard Dock icon and macOS window controls
 - Opens centered at 75% of the active screen's usable area
 - App zoom from 80%–200% in 20% steps with crisp native rendering

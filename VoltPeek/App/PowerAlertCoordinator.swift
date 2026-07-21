@@ -27,7 +27,7 @@ enum PowerAlertScreenSelection {
 enum PowerAlertLayout {
     static func frame(
         in visibleFrame: CGRect,
-        preferredSize: CGSize = CGSize(width: 290, height: 62),
+        preferredSize: CGSize = CGSize(width: 280, height: 56),
         topMargin: CGFloat = 8
     ) -> CGRect {
         let horizontalMargin: CGFloat = 12

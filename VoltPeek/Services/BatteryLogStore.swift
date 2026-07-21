@@ -4,6 +4,8 @@ import Foundation
 @MainActor
 @Observable
 final class BatteryLogStore {
+    static let defaultMaximumEntryCount = 100
+
     private struct Document: Codable {
         var version = 1
         var entries: [BatteryLogEntry] = []
@@ -28,7 +30,7 @@ final class BatteryLogStore {
     init(
         fileManager: FileManager = .default,
         rootDirectory: URL? = nil,
-        maximumEntryCount: Int = 1_000,
+        maximumEntryCount: Int = defaultMaximumEntryCount,
         persistenceInterval: TimeInterval = 60
     ) {
         self.fileManager = fileManager
@@ -129,6 +131,7 @@ final class BatteryLogStore {
             endPercentage: battery.percentage,
             lastObservedDate: date
         )
+        prune()
         persist()
         lastPersistedDate = date
     }
@@ -173,9 +176,13 @@ final class BatteryLogStore {
     }
 
     private func prune() {
-        guard entries.count > maximumEntryCount else { return }
+        let completedEntryLimit = max(
+            0,
+            maximumEntryCount - (currentEntry == nil ? 0 : 1)
+        )
+        guard entries.count > completedEntryLimit else { return }
         entries.sort { $0.startDate < $1.startDate }
-        entries.removeFirst(entries.count - maximumEntryCount)
+        entries.removeFirst(entries.count - completedEntryLimit)
     }
 
     private func shouldKeep(_ entry: BatteryLogEntry) -> Bool {

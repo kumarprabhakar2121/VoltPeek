@@ -13,34 +13,9 @@ struct PowerAlertPillView: View {
     private var title: String {
         switch event {
         case .charging: return "Charging"
-        case .unplugged: return "On Battery"
+        case .unplugged: return "Discharging"
         case .lowBattery: return "Low Battery"
         case .fullyCharged: return "Fully Charged"
-        }
-    }
-
-    private var detail: String {
-        switch event {
-        case .charging:
-            if let time = event.timeRemaining {
-                return "\(event.percentage)% · \(time) to full"
-            }
-            return "\(event.percentage)% · Estimating time to full…"
-        case .unplugged:
-            if let time = event.timeRemaining {
-                return "\(event.percentage)% · \(time) left"
-            }
-            return "\(event.percentage)% · Estimating battery time…"
-        case .lowBattery:
-            if let time = event.timeRemaining {
-                return "\(event.percentage)% · \(time) left"
-            }
-            return "\(event.percentage)% · Charge soon"
-        case .fullyCharged:
-            if let time = event.timeRemaining {
-                return "\(event.percentage)% · \(time) estimated runtime"
-            }
-            return "\(event.percentage)% · Unplug to estimate runtime"
         }
     }
 
@@ -101,33 +76,23 @@ struct PowerAlertPillView: View {
                     )
                 )
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text(title)
-                    .font(.system(
-                        size: 14,
-                        weight: accessibility.boldText ? .bold : .semibold
-                    ))
-                    .foregroundStyle(.primary)
+            Text(title)
+                .font(.system(
+                    size: 14,
+                    weight: accessibility.boldText ? .bold : .semibold
+                ))
+                .foregroundStyle(.primary)
 
-                Text(detail)
-                    .font(.system(size: 11, weight: .medium))
-                    .foregroundStyle(.secondary)
-                    .monospacedDigit()
-            }
+            Text("\(event.percentage)%")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(accent)
+                .monospacedDigit()
 
             Spacer(minLength: 4)
-
-            ZStack {
-                Circle()
-                    .fill(accent.opacity(0.16))
-                    .frame(width: 14, height: 14)
-                Circle()
-                    .fill(accent)
-                    .frame(width: 7, height: 7)
-            }
         }
-        .padding(.horizontal, 12)
-        .frame(width: 290, height: 62)
+        .padding(.leading, 12)
+        .padding(.trailing, 34)
+        .frame(width: 280, height: 56)
         .background {
             let shape = Capsule()
             Group {
@@ -158,6 +123,17 @@ struct PowerAlertPillView: View {
                     lineWidth: accessibility.increaseContrast ? 1.5 : 0.75
                 )
             )
+        }
+        .overlay(alignment: .trailing) {
+            ZStack {
+                Circle()
+                    .fill(accent.opacity(0.16))
+                    .frame(width: 14, height: 14)
+                Circle()
+                    .fill(accent)
+                    .frame(width: 7, height: 7)
+            }
+            .padding(.trailing, 14)
         }
         .shadow(color: accent.opacity(0.08), radius: 10, y: 3)
         .shadow(color: .black.opacity(0.22), radius: 12, y: 5)

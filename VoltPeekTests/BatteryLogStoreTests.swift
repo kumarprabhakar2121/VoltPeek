@@ -16,6 +16,10 @@ final class BatteryLogStoreTests: XCTestCase {
         tempRoot = nil
     }
 
+    func testDefaultRetentionLimitIsOneHundredEntries() {
+        XCTAssertEqual(BatteryLogStore.defaultMaximumEntryCount, 100)
+    }
+
     func testChargingSessionTracksPercentageAndClosesOnACIdle() {
         let store = makeStore()
         let start = Date(timeIntervalSince1970: 1_000)
@@ -106,6 +110,33 @@ final class BatteryLogStoreTests: XCTestCase {
         XCTAssertEqual(reloaded.entries, store.entries)
     }
 
+    func testCurrentSessionCountsTowardRetentionLimit() {
+        let store = makeStore(maximumEntryCount: 2)
+        let start = Date(timeIntervalSince1970: 5_500)
+
+        for offset in 0..<2 {
+            let date = start.addingTimeInterval(Double(offset * 100))
+            store.record(
+                battery(percentage: 30 + offset, charging: true, onAC: true),
+                at: date
+            )
+            store.record(
+                battery(percentage: 31 + offset, charging: false, onAC: true),
+                at: date.addingTimeInterval(60)
+            )
+        }
+
+        store.record(
+            battery(percentage: 80, charging: false, onAC: false),
+            at: start.addingTimeInterval(250)
+        )
+
+        XCTAssertEqual(store.entries.count, 1)
+        XCTAssertNotNil(store.currentEntry)
+        XCTAssertEqual(store.allEntriesNewestFirst.count, 2)
+        XCTAssertEqual(store.entries[0].startPercentage, 31)
+    }
+
     func testCorruptFileRecoversWithEmptyHistory() throws {
         let historyURL = tempRoot.appendingPathComponent("battery-history.json")
         try Data("not-json".utf8).write(to: historyURL)
@@ -158,7 +189,9 @@ final class BatteryLogStoreTests: XCTestCase {
         XCTAssertEqual(store.entries[0].duration(), 120, accuracy: 0.01)
     }
 
-    private func makeStore(maximumEntryCount: Int = 1_000) -> BatteryLogStore {
+    private func makeStore(
+        maximumEntryCount: Int = BatteryLogStore.defaultMaximumEntryCount
+    ) -> BatteryLogStore {
         BatteryLogStore(
             rootDirectory: tempRoot,
             maximumEntryCount: maximumEntryCount,

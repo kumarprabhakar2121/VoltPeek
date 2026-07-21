@@ -95,6 +95,9 @@
     <p>VoltPeek uses Apple’s IOKit / IOPowerSources APIs to read battery and charger metrics (percentage, watts, voltage, current, temperature, health, cycle count, adapter details). This data stays on your device and is not uploaded.</p>
     <p>The app does <strong>not</strong> read your files, photos, contacts, messages, browsing history, or Keychain.</p>
 
+    <h2>Local battery history</h2>
+    <p>Battery Log (Beta) stores up to 100 recent charging and battery-use sessions in an atomic JSON file under Application Support. Entries contain local timestamps, battery percentages, session type, and duration. Sleep and app-restart gaps are excluded. This history never leaves your Mac.</p>
+
     <h2>Local diagnostics (optional, on-device)</h2>
     <p>VoltPeek may write diagnostic logs and crash markers under Application Support on your Mac so you can debug issues. It keeps one activity log for the current local calendar day and removes older activity logs automatically; the latest crash marker is retained until cleared. These files stay local. Nothing is uploaded automatically. You can copy or email a report yourself from <strong>Diagnostics</strong> if you choose to contact support.</p>
 
