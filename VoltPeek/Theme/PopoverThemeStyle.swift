@@ -90,16 +90,18 @@ struct MaterialCard<Content: View>: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: profile.cornerRadius * scale, style: .continuous)
-                    .fill(Color(nsColor: .controlBackgroundColor))
+                    .fill(AppPalette.surface)
                     .shadow(
-                        color: a11y.reduceTransparency ? .clear : .black.opacity(a11y.increaseContrast ? 0.16 : 0.08),
+                        color: a11y.reduceTransparency ? .clear : .black.opacity(a11y.increaseContrast ? 0.14 : 0.06),
                         radius: a11y.reduceTransparency ? 0 : 3 * scale,
                         y: a11y.reduceTransparency ? 0 : 1
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: profile.cornerRadius * scale, style: .continuous)
                             .strokeBorder(
-                                Color.primary.opacity(a11y.increaseContrast ? 0.35 : 0.08),
+                                a11y.increaseContrast
+                                    ? Color.primary.opacity(0.35)
+                                    : AppPalette.border.opacity(0.85),
                                 lineWidth: a11y.borderWidth
                             )
                     )
@@ -122,13 +124,20 @@ struct GlassPanel<Content: View>: View {
                 let shape = RoundedRectangle(cornerRadius: profile.cornerRadius * scale, style: .continuous)
                 Group {
                     if a11y.reduceTransparency {
-                        shape.fill(Color(nsColor: .controlBackgroundColor))
+                        shape.fill(AppPalette.surface)
                     } else {
-                        shape.fill(.ultraThinMaterial)
+                        shape
+                            .fill(.ultraThinMaterial)
+                            .overlay(shape.fill(Color.cyan.opacity(0.025)))
                     }
                 }
                 .overlay(
-                    shape.strokeBorder(.primary.opacity(a11y.borderOpacity), lineWidth: a11y.borderWidth)
+                    shape.strokeBorder(
+                        a11y.increaseContrast
+                            ? Color.primary.opacity(0.35)
+                            : AppPalette.border.opacity(0.80),
+                        lineWidth: a11y.borderWidth
+                    )
                 )
             }
     }

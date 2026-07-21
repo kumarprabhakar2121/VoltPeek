@@ -26,6 +26,37 @@ struct MenuView: View {
             }
         }
         .id(environmentFingerprint)
+        .background {
+            ZStack {
+                AppPalette.canvas
+                switch viewModel.settingsManager.popoverTheme {
+                case .compact:
+                    Color.primary.opacity(0.012)
+                case .material:
+                    Color.primary.opacity(0.012)
+                case .liquidGlass:
+                    LinearGradient(
+                        colors: [Color.cyan.opacity(0.04), Color.blue.opacity(0.018)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                }
+                if viewModel.battery.isCharging {
+                    LinearGradient(
+                        colors: [
+                            Color.green.opacity(0.028),
+                            Color.green.opacity(0.008),
+                            Color.clear
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .transition(.opacity)
+                }
+            }
+            .ignoresSafeArea()
+            .animation(.easeInOut(duration: 0.45), value: viewModel.battery.isCharging)
+        }
         .themeEnvironment(
             theme: viewModel.settingsManager.popoverTheme,
             fontSize: viewModel.settingsManager.fontSize,

@@ -112,7 +112,7 @@ struct LiquidGlassPopoverLayout: View {
         .background {
             if !a11y.reduceTransparency {
                 LinearGradient(
-                    colors: [tint.opacity(0.10), Color.clear],
+                    colors: [tint.opacity(0.03), Color.clear],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )

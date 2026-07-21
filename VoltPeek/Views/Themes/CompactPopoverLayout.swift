@@ -26,6 +26,16 @@ struct CompactPopoverLayout: View {
                     .font(type.caption)
                     .foregroundStyle(.secondary.opacity(a11y.secondaryOpacity))
             }
+            .padding(8 * scale)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                AppPalette.surface,
+                in: RoundedRectangle(cornerRadius: 8 * scale, style: .continuous)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 8 * scale, style: .continuous)
+                    .strokeBorder(AppPalette.border.opacity(0.75), lineWidth: a11y.borderWidth)
+            )
 
             group("Power") {
                 metricRow(
@@ -91,6 +101,16 @@ struct CompactPopoverLayout: View {
                 .tracking(0.4)
             content()
         }
+        .padding(8 * scale)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            AppPalette.surface,
+            in: RoundedRectangle(cornerRadius: 8 * scale, style: .continuous)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 8 * scale, style: .continuous)
+                .strokeBorder(AppPalette.border.opacity(0.75), lineWidth: a11y.borderWidth)
+        )
     }
 
     private func metricRow(_ label: String, _ value: String, color: Color = .primary) -> some View {

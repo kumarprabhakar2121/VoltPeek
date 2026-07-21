@@ -12,7 +12,7 @@ struct PopoverFooter: View {
     var body: some View {
         VStack(spacing: 8 * scale) {
             Rectangle()
-                .fill(Color.primary.opacity(a11y.increaseContrast ? 0.28 : 0.1))
+                .fill(Color.primary.opacity(a11y.increaseContrast ? 0.28 : 0.08))
                 .frame(height: 1)
 
             HStack {
@@ -54,10 +54,22 @@ private struct PopoverFooterButtonStyle: ButtonStyle {
         configuration.label
             .font(font)
             .foregroundStyle(isHovered || configuration.isPressed ? Color.primary : Color.secondary)
-            .padding(.horizontal, 4)
-            .padding(.vertical, 2)
-            .contentShape(Rectangle())
-            .opacity(configuration.isPressed ? 0.7 : 1)
+            .padding(.horizontal, 7)
+            .padding(.vertical, 4)
+            .background(
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(
+                        configuration.isPressed
+                            ? Color.primary.opacity(0.09)
+                            : isHovered
+                                ? Color.primary.opacity(0.055)
+                                : Color.clear
+                    )
+            )
+            .contentShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+            .opacity(configuration.isPressed ? 0.82 : 1)
+            .animation(.easeOut(duration: 0.10), value: isHovered)
+            .animation(.easeOut(duration: 0.08), value: configuration.isPressed)
             .onHover { hovering in
                 isHovered = hovering
                 if hovering {
@@ -143,12 +155,14 @@ struct GlassChip: View {
             let shape = RoundedRectangle(cornerRadius: 12 * scale, style: .continuous)
             Group {
                 if a11y.reduceTransparency {
-                    shape.fill(Color(nsColor: .controlBackgroundColor))
+                    shape.fill(AppPalette.surface)
                 } else {
-                    shape.fill(.thinMaterial)
+                    shape
+                        .fill(.thinMaterial)
+                        .overlay(shape.fill(Color.cyan.opacity(0.025)))
                 }
             }
-            .overlay(shape.strokeBorder(.primary.opacity(a11y.borderOpacity), lineWidth: 0.6))
+            .overlay(shape.strokeBorder(AppPalette.border.opacity(0.80), lineWidth: 0.6))
         }
     }
 }
