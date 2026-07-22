@@ -1,6 +1,6 @@
 # Homebrew — VoltPeek
 
-Current cask version: **1.1.1** (personal tap).
+Current cask version: **1.3.0** (personal tap).
 
 ## Install (works today)
 
