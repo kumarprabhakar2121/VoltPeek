@@ -100,9 +100,16 @@ final class BatteryLogStoreTests: XCTestCase {
         let start = Date(timeIntervalSince1970: 5_000)
 
         for offset in 0..<4 {
-            let date = start.addingTimeInterval(Double(offset * 100))
+            let date = start.addingTimeInterval(Double(offset * 200))
             store.record(battery(percentage: 20 + offset, charging: true, onAC: true), at: date)
-            store.record(battery(percentage: 21 + offset, charging: false, onAC: true), at: date.addingTimeInterval(50))
+            store.record(
+                battery(percentage: 23 + offset, charging: true, onAC: true),
+                at: date.addingTimeInterval(90)
+            )
+            store.record(
+                battery(percentage: 23 + offset, charging: false, onAC: true),
+                at: date.addingTimeInterval(100)
+            )
         }
 
         XCTAssertEqual(store.entries.count, 2)
@@ -187,6 +194,74 @@ final class BatteryLogStoreTests: XCTestCase {
 
         XCTAssertEqual(store.entries.count, 1)
         XCTAssertEqual(store.entries[0].duration(), 120, accuracy: 0.01)
+    }
+
+    func testShortOnePercentSessionIsDiscarded() {
+        let store = makeStore()
+        let start = Date(timeIntervalSince1970: 10_000)
+        store.record(battery(percentage: 40, charging: false, onAC: false), at: start)
+        store.record(
+            battery(percentage: 39, charging: false, onAC: false),
+            at: start.addingTimeInterval(20)
+        )
+        store.handleAppTermination(at: start.addingTimeInterval(25))
+
+        XCTAssertTrue(store.entries.isEmpty)
+        XCTAssertNil(store.currentEntry)
+    }
+
+    func testShortMeaningfulDeltaSessionIsRetained() {
+        let store = makeStore()
+        let start = Date(timeIntervalSince1970: 11_000)
+        store.record(battery(percentage: 50, charging: false, onAC: false), at: start)
+        store.record(
+            battery(percentage: 47, charging: false, onAC: false),
+            at: start.addingTimeInterval(30)
+        )
+        store.handleAppTermination(at: start.addingTimeInterval(35))
+
+        XCTAssertEqual(store.entries.count, 1)
+        XCTAssertEqual(store.entries[0].startPercentage, 50)
+        XCTAssertEqual(store.entries[0].endPercentage, 47)
+    }
+
+    func testLoadDropsLegacyNoisyShortSessions() throws {
+        let historyURL = tempRoot.appendingPathComponent("battery-history.json")
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        let noisy = BatteryLogEntry(
+            kind: .discharging,
+            startDate: Date(timeIntervalSince1970: 12_000),
+            endDate: Date(timeIntervalSince1970: 12_010),
+            startPercentage: 64,
+            endPercentage: 63,
+            lastObservedDate: Date(timeIntervalSince1970: 12_010),
+            completionReason: .stateChanged
+        )
+        let kept = BatteryLogEntry(
+            kind: .discharging,
+            startDate: Date(timeIntervalSince1970: 12_100),
+            endDate: Date(timeIntervalSince1970: 12_460),
+            startPercentage: 63,
+            endPercentage: 47,
+            lastObservedDate: Date(timeIntervalSince1970: 12_460),
+            completionReason: .stateChanged
+        )
+        let document: [String: Any] = [
+            "version": 1,
+            "entries": [
+                try JSONSerialization.jsonObject(with: encoder.encode(noisy)),
+                try JSONSerialization.jsonObject(with: encoder.encode(kept))
+            ],
+            "currentEntry": NSNull()
+        ]
+        let data = try JSONSerialization.data(withJSONObject: document)
+        try data.write(to: historyURL)
+
+        let store = makeStore()
+        XCTAssertEqual(store.entries.count, 1)
+        XCTAssertEqual(store.entries[0].startPercentage, 63)
+        XCTAssertEqual(store.entries[0].endPercentage, 47)
     }
 
     private func makeStore(

@@ -10,7 +10,7 @@ Built for developers and power users who want to know *how* the pack is charging
 
 **Requirements:** macOS 14+ · Apple Silicon or Intel · no account · no network
 
-Support: [hello@voltpeek.app](mailto:hello@voltpeek.app)
+Developer: [Prabhakar Kumar](https://github.com/kumarprabhakar2121) · Support: [hello@voltpeek.app](mailto:hello@voltpeek.app)
 
 ---
 

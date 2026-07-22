@@ -46,9 +46,11 @@ final class AppDiagnostics: @unchecked Sendable {
             ensureDirectory()
             removePastActivityLogs(keeping: logFileURL)
             promotePendingSignalCrash()
-            openCrashFileDescriptor()
-            installExceptionHandler()
-            installSignalHandlers()
+            if shouldInstallCrashHandlers {
+                openCrashFileDescriptor()
+                installExceptionHandler()
+                installSignalHandlers()
+            }
             appendLocked("Launch \(Self.appVersionLine()) | macOS \(ProcessInfo.processInfo.operatingSystemVersionString)")
         }
     }
@@ -108,6 +110,11 @@ final class AppDiagnostics: @unchecked Sendable {
             guard let text = readFile(crashFileURL) else { return false }
             return !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         }
+    }
+
+    /// True when macOS also saved a VoltPeek crash/ips under DiagnosticReports.
+    var hasSystemCrashReport: Bool {
+        queue.sync { latestSystemCrashSnippet() != nil }
     }
 
     var diagnosticsDirectoryURL: URL { rootDirectory }
@@ -195,10 +202,18 @@ final class AppDiagnostics: @unchecked Sendable {
             let pending = readFile(pendingSignalFileURL)?
                 .trimmingCharacters(in: .whitespacesAndNewlines),
             !pending.isEmpty
-        else { return }
+        else {
+            try? fileManager.removeItem(at: pendingSignalFileURL)
+            return
+        }
 
         let previous = readFile(crashFileURL)?
             .trimmingCharacters(in: .whitespacesAndNewlines)
+        // Avoid stacking identical signal markers from Xcode Stop / test host churn.
+        if previous == pending {
+            try? fileManager.removeItem(at: pendingSignalFileURL)
+            return
+        }
         let combined = [previous, pending].compactMap { value in
             guard let value, !value.isEmpty else { return nil }
             return value
@@ -227,10 +242,28 @@ final class AppDiagnostics: @unchecked Sendable {
     }
 
     private func installSignalHandlers() {
-        let signals: [Int32] = [SIGABRT, SIGILL, SIGSEGV, SIGFPE, SIGBUS, SIGTRAP]
+        // Omit SIGTRAP — debuggers use it for breakpoints and it creates false crash markers.
+        let signals: [Int32] = [SIGABRT, SIGILL, SIGSEGV, SIGFPE, SIGBUS]
         for sig in signals {
             signal(sig, voltPeekSignalHandler)
         }
+    }
+
+    /// Skip process-wide crash hooks under XCTest / attached debuggers to avoid false positives.
+    private var shouldInstallCrashHandlers: Bool {
+        if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
+            return false
+        }
+        return !Self.isDebuggerAttached
+    }
+
+    private static var isDebuggerAttached: Bool {
+        var info = kinfo_proc()
+        var size = MemoryLayout<kinfo_proc>.stride
+        var mib: [Int32] = [CTL_KERN, KERN_PROC, KERN_PROC_PID, getpid()]
+        let result = sysctl(&mib, u_int(mib.count), &info, &size, nil, 0)
+        guard result == 0 else { return false }
+        return (info.kp_proc.p_flag & P_TRACED) != 0
     }
 
     // MARK: - File helpers
@@ -432,9 +465,20 @@ private var voltPeekCrashFileDescriptor: Int32 = -1
 private func voltPeekSignalHandler(_ signalNumber: Int32) {
     let fd = voltPeekCrashFileDescriptor
     if fd >= 0 {
-        // Static bytes only — no heap allocation in the signal path.
-        let message: StaticString = "VoltPeek crash (fatal signal; see macOS DiagnosticReports)\n"
-        message.withUTF8Buffer { buffer in
+        // Static bytes / stack only — no heap allocation in the signal path.
+        let prefix: StaticString = "VoltPeek crash (signal "
+        prefix.withUTF8Buffer { buffer in
+            _ = write(fd, buffer.baseAddress, buffer.count)
+        }
+        var digits = (
+            UInt8(48 + ((signalNumber / 10) % 10)),
+            UInt8(48 + (signalNumber % 10))
+        )
+        withUnsafeBytes(of: &digits) { buffer in
+            _ = write(fd, buffer.baseAddress, buffer.count)
+        }
+        let suffix: StaticString = "; see macOS DiagnosticReports)\n"
+        suffix.withUTF8Buffer { buffer in
             _ = write(fd, buffer.baseAddress, buffer.count)
         }
         fsync(fd)

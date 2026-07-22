@@ -3,6 +3,9 @@ import SwiftUI
 /// Version, support contact, and short product blurb.
 struct AboutView: View {
     private let supportEmail = "hello@voltpeek.app"
+    private let developerName = "Prabhakar Kumar"
+    private let githubProfileURL = URL(string: "https://github.com/kumarprabhakar2121")!
+    private let githubRepoURL = URL(string: "https://github.com/kumarprabhakar2121/VoltPeek")!
     @Environment(\.appScale) private var scale
 
     private var version: String {
@@ -25,6 +28,18 @@ struct AboutView: View {
                     .font(.system(size: 13 * scale))
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
+
+                VStack(alignment: .leading, spacing: 6 * scale) {
+                    Text("Developer")
+                        .font(.system(size: 12 * scale, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                    Text(developerName)
+                        .font(.system(size: 14 * scale, weight: .semibold))
+                    Link("GitHub Profile", destination: githubProfileURL)
+                    Link("VoltPeek Repository", destination: githubRepoURL)
+                }
+                .font(.system(size: 13 * scale))
+                .padding(.top, 4 * scale)
 
                 Link("Support: \(supportEmail)", destination: URL(string: "mailto:\(supportEmail)")!)
                     .font(.system(size: 13 * scale))

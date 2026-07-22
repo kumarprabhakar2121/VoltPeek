@@ -5,6 +5,7 @@ import SwiftUI
 struct DiagnosticsView: View {
     @State private var reportText = ""
     @State private var hasCrash = false
+    @State private var hasSystemCrashReport = false
     @State private var didCopy = false
     @Environment(\.appScale) private var scale
 
@@ -20,9 +21,22 @@ struct DiagnosticsView: View {
                 .fixedSize(horizontal: false, vertical: true)
 
             if hasCrash {
-                Label("A crash was recorded on a previous launch.", systemImage: "exclamationmark.triangle.fill")
+                if hasSystemCrashReport {
+                    Label(
+                        "A crash was recorded on a previous launch.",
+                        systemImage: "exclamationmark.triangle.fill"
+                    )
                     .font(.system(size: 13 * scale))
                     .foregroundStyle(.orange)
+                } else {
+                    Label(
+                        "An abnormal-exit marker exists, but macOS did not save a crash report. This often happens when quitting from Xcode or during tests — not a confirmed app crash.",
+                        systemImage: "info.circle.fill"
+                    )
+                    .font(.system(size: 13 * scale))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                }
             }
 
             ScrollView {
@@ -102,5 +116,6 @@ struct DiagnosticsView: View {
     private func refresh() {
         reportText = AppDiagnostics.shared.supportReport()
         hasCrash = AppDiagnostics.shared.hasCapturedCrash
+        hasSystemCrashReport = AppDiagnostics.shared.hasSystemCrashReport
     }
 }

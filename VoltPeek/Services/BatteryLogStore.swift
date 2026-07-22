@@ -19,7 +19,10 @@ final class BatteryLogStore {
     private let rootDirectory: URL
     private let maximumEntryCount: Int
     private let persistenceInterval: TimeInterval
-    private let minimumUnchangedSessionDuration: TimeInterval = 60
+    /// Completed sessions shorter than this need a meaningful percentage swing to be kept.
+    private let minimumMeaningfulDuration: TimeInterval = 60
+    /// Absolute percentage change that keeps a short completed session.
+    private let minimumMeaningfulDelta = 2
     private var lastPersistedDate: Date?
     private var isSleeping = false
 
@@ -186,9 +189,11 @@ final class BatteryLogStore {
     }
 
     private func shouldKeep(_ entry: BatteryLogEntry) -> Bool {
-        guard entry.startPercentage == entry.endPercentage else { return true }
         let endDate = entry.endDate ?? entry.lastObservedDate
-        return endDate.timeIntervalSince(entry.startDate) >= minimumUnchangedSessionDuration
+        let duration = endDate.timeIntervalSince(entry.startDate)
+        let delta = abs(entry.endPercentage - entry.startPercentage)
+        if duration >= minimumMeaningfulDuration { return true }
+        return delta >= minimumMeaningfulDelta
     }
 
     private func load() {
@@ -205,6 +210,9 @@ final class BatteryLogStore {
         entries = document.entries.filter(shouldKeep)
         currentEntry = document.currentEntry
         prune()
+        if entries.count != document.entries.count {
+            persist()
+        }
     }
 
     private func persist() {

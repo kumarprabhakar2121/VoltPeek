@@ -81,7 +81,24 @@ final class AppDiagnosticsTests: XCTestCase {
 
         XCTAssertTrue(diagnostics.hasCapturedCrash)
         XCTAssertTrue(diagnostics.supportReport().contains("fatal signal marker"))
-        XCTAssertEqual(try String(contentsOf: markerURL, encoding: .utf8), "")
+        XCTAssertFalse(FileManager.default.fileExists(atPath: markerURL.path))
+    }
+
+    func testInstallDeduplicatesIdenticalPendingSignalMarker() throws {
+        let crashURL = tempRoot.appendingPathComponent("last-crash.txt")
+        let markerURL = tempRoot.appendingPathComponent("pending-signal-crash.txt")
+        let marker = "VoltPeek crash (signal 06; see macOS DiagnosticReports)"
+        try Data(marker.utf8).write(to: crashURL)
+        try Data(marker.utf8).write(to: markerURL)
+
+        diagnostics.install()
+
+        XCTAssertEqual(
+            try String(contentsOf: crashURL, encoding: .utf8)
+                .trimmingCharacters(in: .whitespacesAndNewlines),
+            marker
+        )
+        XCTAssertFalse(FileManager.default.fileExists(atPath: markerURL.path))
     }
 
     func testGitHubIssueIsPrefilledWithDiagnostics() throws {

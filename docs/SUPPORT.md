@@ -1,6 +1,8 @@
 # Support — VoltPeek
 
-**Email:** [hello@voltpeek.app](mailto:hello@voltpeek.app)
+**Email:** [hello@voltpeek.app](mailto:hello@voltpeek.app)  
+**Developer:** [Prabhakar Kumar](https://github.com/kumarprabhakar2121)  
+**GitHub:** [github.com/kumarprabhakar2121](https://github.com/kumarprabhakar2121)
 
 Hosted page: https://kumarprabhakar2121.github.io/VoltPeek/support.html
 
@@ -32,7 +34,7 @@ VoltPeek is a **fully offline** app. It does not need internet access and does n
 - [ ] Plug in, unplug, reach low battery, and fully charge: the top-center pill appears briefly with the correct state, estimate, color, and gentle sound
 - [ ] General → Behavior can disable the power-status pill and its sounds
 - [ ] Diagnostics can copy a report, reveal the local folder, and retain only today's activity log
-- [ ] About shows version and support email link
+- [ ] About shows version, developer credit, GitHub profile link, and support email
 - [ ] Launch at Login toggle works (may need approval in System Settings)
 - [ ] Reset All Settings restores defaults
 - [ ] Quit from popover footer exits cleanly
